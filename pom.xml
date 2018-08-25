@@ -90,7 +90,7 @@
                         <version>3.0.2</version>
                         <executions>
                             <execution>
-                                <id>build</id>
+                                <id>buildScan</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
@@ -111,7 +111,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>build</id>
+                                <id>buildMain</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
