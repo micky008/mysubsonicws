@@ -1,6 +1,10 @@
 package com.msc.mysubsonicws.scan;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.entity.LastScan;
 import java.io.File;
+import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +25,7 @@ public class ScanInitial {
         return executor;
     }
 
-    public void readFolder(File folder) {
+    private void readFolder(File folder) throws SQLException {
         UUID rootUuid = UUID.randomUUID();
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
@@ -37,7 +41,7 @@ public class ScanInitial {
         }
     }
 
-    public void scan(File folder, UUID rootid, UUID id) {
+    private void scan(File folder, UUID rootid, UUID id) throws SQLException {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
                 getExecutor().submit(new Thread() {
@@ -68,14 +72,21 @@ public class ScanInitial {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws SQLException {
         if (args.length == 0) {
             System.out.println("folder obligatoire ! Merci");
             return;
         }
         //long debut = System.currentTimeMillis();
         new ScanInitial().readFolder(new File(args[0]));
-        
+
+    }
+
+    public void launchScan(File initialFolder) throws SQLException {
+        readFolder(initialFolder);
+        LastScan ls = new LastScan();
+        ls.setLastScan(new BigInteger(""+System.currentTimeMillis()));
+        FactoryDAO.lsatScanDAO.insert(ls);
     }
 
 }

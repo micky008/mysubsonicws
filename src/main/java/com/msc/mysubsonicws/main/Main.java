@@ -1,5 +1,6 @@
 package com.msc.mysubsonicws.main;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
 import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;

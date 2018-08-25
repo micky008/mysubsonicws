@@ -1,51 +1,33 @@
 package com.msc.mysubsonicws.entity;
 
+import com.msc.dao.daoproject.annotation.Id;
+import com.msc.dao.daoproject.annotation.Name;
+import com.msc.dao.daoproject.annotation.PrimaryKey;
 
 /**
  *
  * @author micky
  */
+@Name(name = "folders")
 public class Folder {
 
+    @Id
+    @PrimaryKey
+    private String id;
 
-    private Integer id;
-
-    private Integer idParent;
+    @Id
+    @PrimaryKey
+    @Name(name = "id_parent")
+    private String idParent;
 
     private String pathname;
 
+    @Name(name = "img_album")
     private String imgAlbum;
-    
+
     private String name;
 
-    
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the idParent
-     */
-    public Integer getIdParent() {
-        return idParent;
-    }
-
-    /**
-     * @param idParent the idParent to set
-     */
-    public void setIdParent(Integer idParent) {
-        this.idParent = idParent;
-    }
 
     /**
      * @return the pathName
@@ -88,10 +70,40 @@ public class Folder {
     public void setImgAlbum(String imgFolder) {
         this.imgAlbum = imgFolder;
     }
-    
+
     @Override
-    public String toString(){
-	return id+" "+idParent+" "+name;
-    } 
-    
+    public String toString() {
+        return getId() + " " + getIdParent() + " " + getName();
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the idParent
+     */
+    public String getIdParent() {
+        return idParent;
+    }
+
+    /**
+     * @param idParent the idParent to set
+     */
+    public void setIdParent(String idParent) {
+        this.idParent = idParent;
+    }
+
+
+
 }

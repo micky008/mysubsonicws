@@ -1,14 +1,24 @@
 package com.msc.mysubsonicws.entity;
 
+import com.msc.dao.daoproject.annotation.Id;
+import com.msc.dao.daoproject.annotation.Name;
+import com.msc.dao.daoproject.annotation.PrimaryKey;
+
 /**
  *
  * @author micky
  */
+@Name(name = "musiques")
 public class Musique {
 
-    private Integer id;
+    @Id
+    @PrimaryKey
+    private String id;
 
-    private Integer idFolder;
+    @Id
+    @PrimaryKey
+    @Name(name = "id_folder")
+    private String idFolder;
 
     private String titre;
 
@@ -22,37 +32,10 @@ public class Musique {
 
     private Integer biterate;
 
+    @Name(name = "fullname")
     private String fullName;
 
-    private Long lastModified;
 
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-	return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-	this.id = id;
-    }
-
-    /**
-     * @return the idFolder
-     */
-    public Integer getIdFolder() {
-	return idFolder;
-    }
-
-    /**
-     * @param idFolder the idFolder to set
-     */
-    public void setIdFolder(Integer idFolder) {
-	this.idFolder = idFolder;
-    }
 
     /**
      * @return the titre
@@ -152,23 +135,37 @@ public class Musique {
 	this.fullName = fullName;
     }
 
-    /**
-     * @return the lastModified
-     */
-    public Long getLastModified() {
-	return lastModified;
-    }
-
-    /**
-     * @param lastModified the lastModified to set
-     */
-    public void setLastModified(Long lastModified) {
-	this.lastModified = lastModified;
-    }
-
     @Override
     public String toString() {
-	return id + " " + idFolder + " " + titre+" "+artiste;
+	return getId() + " " + getIdFolder() + " " + getTitre()+" "+getArtiste();
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the idFolder
+     */
+    public String getIdFolder() {
+        return idFolder;
+    }
+
+    /**
+     * @param idFolder the idFolder to set
+     */
+    public void setIdFolder(String idFolder) {
+        this.idFolder = idFolder;
     }
 
 }

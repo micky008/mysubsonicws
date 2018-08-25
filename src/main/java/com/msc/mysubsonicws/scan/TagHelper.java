@@ -23,8 +23,7 @@ public class TagHelper {
 
             //musique.setBiterate(tag.getFirst(FieldKey.BPM));
             musique.setFullName(audioFile.getAbsolutePath().replace('\\', '/'));
-            musique.setLastModified(audioFile.lastModified());
-
+            
             try {
                 musique.setAlbum(tag.getFirst(FieldKey.ALBUM));
             } catch (Throwable e) {
