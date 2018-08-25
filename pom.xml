@@ -96,12 +96,33 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <classifier>executable</classifier>
+                                    <classifier>scanInitial</classifier>
                                     <archive>
                                         <manifest>
                                             <addClasspath>true</addClasspath>
                                             <classpathPrefix>lib/</classpathPrefix>
-                                            <mainClass>com.msc.scanfolder2.NewMain1</mainClass>
+                                            <mainClass>com.msc.mysubsonicws.scan.ScanInitial</mainClass>
+                                            <useUniqueVersions>false</useUniqueVersions>
+                                        </manifest>
+                                        <manifestEntries>
+                                            <Class-Path>.</Class-Path>
+                                        </manifestEntries>
+                                    </archive>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>build</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>main</classifier>
+                                    <archive>
+                                        <manifest>
+                                            <addClasspath>true</addClasspath>
+                                            <classpathPrefix>lib/</classpathPrefix>
+                                            <mainClass>com.msc.mysubsonicws.main.Main</mainClass>
                                             <useUniqueVersions>false</useUniqueVersions>
                                         </manifest>
                                         <manifestEntries>
