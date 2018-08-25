@@ -43,4 +43,15 @@
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-cp pprod</actionName>
+            <displayName>cp pprod</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>package</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>prod</activatedProfile>
+            </activatedProfiles>
+        </action>
     </actions>
