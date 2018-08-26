@@ -1,6 +1,7 @@
 package com.msc.mysubsonicws.scan;
 
 import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
 import java.math.BigInteger;
@@ -19,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class ScanInitial {
 
-    private final String extentionFiles[] = {"mp3", "flac", "ogg"};
+    private final String extentionMediaFiles[] = {"mp3", "flac", "ogg"};
+    private final String extentionPictureFiles[] = {"jpg", "png"};
     protected static ExecutorService executor = null;
 
     protected static synchronized ExecutorService getExecutor() {
@@ -29,11 +31,19 @@ public class ScanInitial {
         return executor;
     }
 
-    private void readFolder(File folder) throws SQLException {
+    private void readFolder(File rootFolder) throws SQLException {
         UUID rootUuid = UUID.randomUUID();
         List<Musique> lm = new ArrayList<>();
-        for (File file : folder.listFiles()) {
+        List<Folder> lf = new ArrayList<>();
+        Folder folder = null;
+        for (File file : rootFolder.listFiles()) {
+            folder = null;
             if (file.isDirectory()) {
+                folder = new Folder();
+                folder.setId(rootUuid.toString());
+                folder.setIdParent(null);
+                folder.setName(file.getName());
+                folder.setPathname(file.getAbsolutePath());
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
@@ -44,18 +54,36 @@ public class ScanInitial {
                         }
                     }
                 });
-            } else if (isGoodFile(file)) {
+                lf.add(folder);
+            } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
                 lm.add(m);
                 System.out.println("id=" + rootUuid.toString() + " - " + file.getAbsolutePath());
+            } else if (isGoodFile(file, extentionPictureFiles)) {
+                if (folder != null) {
+                    folder.setImgAlbum(file.getAbsolutePath());
+                }
             }
         }
-        FactoryDAO.musiqueDAO.insert(lm);
+        if (!lm.isEmpty()) {
+            FactoryDAO.musiqueDAO.insert(lm);
+        }
+        if (!lf.isEmpty()) {
+            FactoryDAO.folderDAO.insert(lf);
+        }
     }
 
-    private void scan(File folder, UUID rootid, UUID id) throws SQLException {
-        for (File file : folder.listFiles()) {
+    private void scan(File parentFolder, UUID rootid, UUID id) throws SQLException {
+        List<Musique> lm = new ArrayList<>();
+        List<Folder> lf = new ArrayList<>();
+        Folder folder = null;
+        for (File file : parentFolder.listFiles()) {
             if (file.isDirectory()) {
+                folder = new Folder();
+                folder.setId(id.toString());
+                folder.setIdParent(rootid.toString());
+                folder.setName(file.getName());
+                folder.setPathname(file.getAbsolutePath());
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
@@ -66,18 +94,29 @@ public class ScanInitial {
                         }
                     }
                 });
-            } else {
-                if (isGoodFile(file)) {
-                    TagHelper.getInfo(file);
-                    System.out.println("rootId=" + rootid.toString() + " - id =" + id.toString() + " - " + file.getAbsolutePath());
+                lf.add(folder);
+            } else if (isGoodFile(file, extentionMediaFiles)) {
+                Musique m = TagHelper.getInfo(file);
+                lm.add(m);
+                System.out.println("rootId=" + rootid.toString() + " - id =" + id.toString() + " - " + file.getAbsolutePath());
+            } else if (isGoodFile(file, extentionPictureFiles)) {
+                if (folder != null) {
+                    folder.setImgAlbum(file.getAbsolutePath());
                 }
             }
+
+        }
+        if (!lm.isEmpty()) {
+            FactoryDAO.musiqueDAO.insert(lm);
+        }
+        if (!lf.isEmpty()) {
+            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
-    private boolean isGoodFile(File file) { //fomctionne pour l'audio et la video
+    private boolean isGoodFile(File file, String[] exts) { //fomctionne pour l'audio et la video
         String filename = file.getName().toLowerCase();
-        for (String ext : extentionFiles) {
+        for (String ext : exts) {
             if (filename.endsWith(ext) && file.length() > 0) {
                 return true;
             }
@@ -100,7 +139,7 @@ public class ScanInitial {
 
     public void launchScan(File initialFolder) throws SQLException {
         readFolder(initialFolder);
-        FactoryDAO.lsatScanDAO.update(new BigInteger(""+System.currentTimeMillis()));
+        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }
 
 }
