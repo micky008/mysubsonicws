@@ -30,8 +30,6 @@ public class Musique {
 
     private String year;
 
-    private Integer biterate;
-
     @Name(name = "fullname")
     private String fullName;
 
@@ -105,20 +103,6 @@ public class Musique {
      */
     public void setYear(String year) {
 	this.year = year;
-    }
-
-    /**
-     * @return the biterate
-     */
-    public Integer getBiterate() {
-	return biterate;
-    }
-
-    /**
-     * @param biterate the biterate to set
-     */
-    public void setBiterate(Integer biterate) {
-	this.biterate = biterate;
     }
 
     /**

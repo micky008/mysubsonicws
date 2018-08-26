@@ -1,13 +1,17 @@
 package com.msc.mysubsonicws.scan;
 
 import com.msc.mysubsonicws.dao.FactoryDAO;
-import com.msc.mysubsonicws.entity.LastScan;
+import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,18 +31,26 @@ public class ScanInitial {
 
     private void readFolder(File folder) throws SQLException {
         UUID rootUuid = UUID.randomUUID();
+        List<Musique> lm = new ArrayList<>();
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
-                        scan(file, rootUuid, UUID.randomUUID());
+                        try {
+                            scan(file, rootUuid, UUID.randomUUID());
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 });
             } else if (isGoodFile(file)) {
+                Musique m = TagHelper.getInfo(file);
+                lm.add(m);
                 System.out.println("id=" + rootUuid.toString() + " - " + file.getAbsolutePath());
             }
         }
+        FactoryDAO.musiqueDAO.insert(lm);
     }
 
     private void scan(File folder, UUID rootid, UUID id) throws SQLException {
@@ -47,7 +59,11 @@ public class ScanInitial {
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
-                        scan(file, id, UUID.randomUUID());
+                        try {
+                            scan(file, id, UUID.randomUUID());
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 });
             } else {
@@ -84,9 +100,7 @@ public class ScanInitial {
 
     public void launchScan(File initialFolder) throws SQLException {
         readFolder(initialFolder);
-        LastScan ls = new LastScan();
-        ls.setLastScan(new BigInteger(""+System.currentTimeMillis()));
-        FactoryDAO.lsatScanDAO.insert(ls);
+        FactoryDAO.lsatScanDAO.update(new BigInteger(""+System.currentTimeMillis()));
     }
 
 }

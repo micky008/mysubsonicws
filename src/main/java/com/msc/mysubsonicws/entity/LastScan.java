@@ -17,6 +17,13 @@ public class LastScan {
     @Name(name = "lastscan")
     private BigInteger lastScan;
 
+    public LastScan() {
+    }
+
+    public LastScan(BigInteger lastScan) {
+        this.lastScan = lastScan;
+    }
+
     /**
      * @return the lastScan
      */
@@ -30,7 +37,5 @@ public class LastScan {
     public void setLastScan(BigInteger lastScan) {
         this.lastScan = lastScan;
     }
-    
-    
-    
+
 }
