@@ -22,12 +22,12 @@ import javax.ws.rs.core.StreamingOutput;
  * @author Michael
  */
 @Path("/musique")
-public class Musique {
+public class MusiqueController {
 
     final int chunk_size = 1024 * 1024; // 1MB chunks
     private final File audio;
 
-    public Musique() {
+    public MusiqueController() {
         audio = new File("c:/t1.flac");
     }
 

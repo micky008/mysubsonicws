@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  *
  * @author Michael
  */
-public class ScanInitial {
-    
+public class ScanInc {
+
     private final String extentionMediaFiles[] = {"mp3", "flac", "ogg"};
     private final String extentionPictureFiles[] = {"jpg", "png"};
     protected static ExecutorService executor = null;
@@ -50,7 +50,7 @@ public class ScanInitial {
                         try {
                             scan(file, rootUuid, UUID.randomUUID());
                         } catch (SQLException ex) {
-                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(ScanInc.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
@@ -90,7 +90,7 @@ public class ScanInitial {
                         try {
                             scan(file, id, UUID.randomUUID());
                         } catch (SQLException ex) {
-                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(ScanInc.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
@@ -133,7 +133,7 @@ public class ScanInitial {
             return;
         }
         //long debut = System.currentTimeMillis();
-        new ScanInitial().readFolder(new File(args[0]));
+        new ScanInc().readFolder(new File(args[0]));
 
     }
 
