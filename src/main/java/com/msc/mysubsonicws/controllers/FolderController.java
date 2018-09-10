@@ -1,6 +1,6 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.helpers.WSConfig;
 import com.msc.mysubsonicws.scan.ScanInitial;
@@ -35,21 +35,24 @@ public class FolderController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getNextFolders(@PathParam("id") String id) {
-        return FactoryDAO.folderDAO.getNextFolders(id);
+        //return FactoryDAO.folderDAO.getNextFolders(id);
+        return null;
     }
 
     @Path("parent/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getParentFolders(String id) {
-        return FactoryDAO.folderDAO.getParentFolders(id);
+        //return FactoryDAO.folderDAO.getParentFolders(id);
+        return null;
     }
 
     @Path("root")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getRootFolders() {
-        return FactoryDAO.folderDAO.getRootFolders();
+        //return FactoryDAO.folderDAO.getRootFolders();
+        return null;
     }
 
     @Path("scan/initial")
@@ -71,7 +74,8 @@ public class FolderController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> scanInc() {
-        return FactoryDAO.folderDAO.getRootFolders();
+        //return FactoryDAO.folderDAO.getRootFolders();
+        return null;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Musique;
 import com.msc.mysubsonicws.helpers.MediaStreamer;
 import java.io.File;
@@ -34,14 +34,16 @@ public class MusiqueController {
     @Path("resolve/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Musique resolve(@PathParam("id") String id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiqueById(id);
+        //return FactoryDAO.musiqueDAO.getMusiqueById(id);
+        return null;
     }
 
     @GET
     @Path("folder/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByFolder(@PathParam("id") String id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);
+        //return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);
+        return null;
     }
 
     @GET
@@ -58,7 +60,8 @@ public class MusiqueController {
     @Path("player/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByPlayer(@PathParam("id") Integer id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);
+        //return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);
+        return null;
     }
 
     @GET

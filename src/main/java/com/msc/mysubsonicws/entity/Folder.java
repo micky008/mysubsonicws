@@ -1,35 +1,34 @@
 package com.msc.mysubsonicws.entity;
 
-import com.msc.dao.daoproject.annotation.Id;
-import com.msc.dao.daoproject.annotation.Name;
-import com.msc.dao.daoproject.annotation.PrimaryKey;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author micky
  */
-@Name(name = "folders")
-public class Folder {
+@Entity
+@Table(name = "folders")
+public class Folder implements Serializable {
 
     public static final String ROOT_ID = "00000000-0000-0000-0000-000000000001";
-    
-    @Id
-    @PrimaryKey
-    private String id;
 
     @Id
-    @PrimaryKey
-    @Name(name = "id_parent")
+    @Column(name = "folder_id")
+    private String id;
+
+    @Column(name = "parent_id")
     private String idParent;
 
     private String pathname;
 
-    @Name(name = "img_album")
+    @Column(name = "img_album")
     private String imgAlbum;
 
     private String name;
-
-
 
     /**
      * @return the pathName
@@ -105,7 +104,5 @@ public class Folder {
     public void setIdParent(String idParent) {
         this.idParent = idParent;
     }
-
-
 
 }

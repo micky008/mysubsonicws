@@ -1,48 +1,59 @@
 package com.msc.mysubsonicws.entity;
 
-import com.msc.dao.daoproject.annotation.Name;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Michael
  */
-@Name(name = "players_musiques_places")
-public class PlayerMusicPlace {
+@Entity
+@Table(name = "player_musique_place")
+public class PlayerMusicPlace implements Serializable {
 
-    @Name(name = "player_id")
-    private Integer playerId;
-    
-    @Name(name = "musique_id")
-    private String musiqueId;
-    
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
+
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "musique_id", nullable = false)
+    private Musique musique;
+
     private Integer place;
 
     /**
-     * @return the playerId
+     * @return the player
      */
-    public Integer getPlayerId() {
-        return playerId;
+    public Player getPlayer() {
+        return player;
     }
 
     /**
-     * @param playerId the playerId to set
+     * @param player the player to set
      */
-    public void setPlayerId(Integer playerId) {
-        this.playerId = playerId;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
-     * @return the musiqueId
+     * @return the musique
      */
-    public String getMusiqueId() {
-        return musiqueId;
+    public Musique getMusique() {
+        return musique;
     }
 
     /**
-     * @param musiqueId the musiqueId to set
+     * @param musique the musique to set
      */
-    public void setMusiqueId(String musiqueId) {
-        this.musiqueId = musiqueId;
+    public void setMusique(Musique musique) {
+        this.musique = musique;
     }
 
     /**

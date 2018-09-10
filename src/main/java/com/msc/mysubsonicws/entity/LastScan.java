@@ -1,20 +1,20 @@
 package com.msc.mysubsonicws.entity;
 
-import com.msc.dao.daoproject.annotation.Id;
-import com.msc.dao.daoproject.annotation.Name;
-import com.msc.dao.daoproject.annotation.PrimaryKey;
+import java.io.Serializable;
 import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Michael
  */
-@Name(name = "lastscan")
-public class LastScan {
+@Entity
+@Table(name = "last_scan")
+public class LastScan implements Serializable {
 
     @Id
-    @PrimaryKey
-    @Name(name = "lastscan")
     private BigInteger lastScan;
 
     public LastScan() {

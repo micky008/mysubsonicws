@@ -1,70 +1,105 @@
 package com.msc.mysubsonicws.dao;
 
-import com.msc.dao.daoproject.generic.DAO;
-import com.msc.dao.daoproject.generic.GenericDaoImpl;
-import com.msc.dao.daoproject.helper.SearchById;
 import com.msc.mysubsonicws.entity.Folder;
-import com.msc.mysubsonicws.scan.ScanInitial;
+import com.msc.mysubsonicws.entity.Musique;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Session;
 
 /**
  *
  * @author Michael
  */
-public class FolderDAO extends GenericDaoImpl<Folder> {
-
-    public FolderDAO() {
-        super(DAO.getConnection());
-    }
-
-    @Override
-    protected Object convertFillObjectCustom(Class<?> clazz, Object res) {
-        return null;
-    }
-
-    @Override
-    protected String convertLogicCustom(Class<?> type, Object o) {
-        return null;
-    }
-
-    private List<Folder> getFolders(String id, Field f) throws SQLException {
-        SearchById sbi = new SearchById(f, id);
-        return this.getObjectsById(sbi);
-
-    }
+public class FolderDAO {
 
     public List<Folder> getNextFolders(String id) {
-        try {
-            Field f = Folder.class.getField("id");
-            return this.getFolders(id, f);
-        } catch (Exception ex) {
-            Logger.getLogger(FolderDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+                List<Folder> lf = null;
+        
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+        
+        lf = session.createQuery( "from Folder where id='"+id+"'" ).list();
+        
+        session.getTransaction().commit();
+        session.close();
+        return lf;
     }
 
     public List<Folder> getParentFolders(String id) {
-        try {
-            Field f = Folder.class.getField("parentId");
-            return this.getFolders(id, f);
-        } catch (Exception ex) {
-            Logger.getLogger(FolderDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+                List<Folder> lf = null;
+        
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+        
+        lf = session.createQuery( "from Folder where idParent='"+id+"'" ).list();
+        
+        session.getTransaction().commit();
+        session.close();
+        return lf;
     }
 
     public List<Folder> getRootFolders() {
-        try {
-            Field f = Folder.class.getField("id");
-            return this.getFolders(Folder.ROOT_ID, f);
-        } catch (Exception ex) {
-            Logger.getLogger(FolderDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+       
+        List<Folder> lf = null;
+        
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+        
+        lf = session.createQuery( "from Folder where id='"+Folder.ROOT_ID+"'" ).list();
+        
+        session.getTransaction().commit();
+        session.close();
+        return lf;
     }
+
     
+    public void insert(Folder m) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.save(m);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void insert(List<Folder> lm) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.save(lm);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    
+    public void insertTest(){
+        Folder f = new Folder();
+        f.setId(Folder.ROOT_ID);
+        f.setIdParent(null);
+        f.setImgAlbum(null);
+        f.setName("truc");
+        f.setPathname("c:/truc");
+        Folder f2 = new Folder();
+        f2.setId(UUID.randomUUID().toString());
+        f2.setIdParent(Folder.ROOT_ID);
+        f2.setImgAlbum(null);
+        f2.setName("truc2");
+        f2.setPathname("c:/truc2");
+        
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+        
+        session.save(f);
+        session.save(f2);
+        
+        session.getTransaction().commit();
+        session.close();
+        
+    }
 }

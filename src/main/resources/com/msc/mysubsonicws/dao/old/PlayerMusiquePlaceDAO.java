@@ -1,7 +1,6 @@
-package com.msc.mysubsonicws.dao;
+package com.msc.mysubsonicws.dao.old;
 
 
-import com.msc.mysubsonicws.dao.old.*;
 import com.msc.mysubsonicws.entity.PlayerMusicPlace;
 import java.sql.Connection;
 

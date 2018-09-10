@@ -1,18 +1,23 @@
 package com.msc.mysubsonicws.entity;
 
-import com.msc.dao.daoproject.annotation.Id;
-import com.msc.dao.daoproject.annotation.Name;
-import com.msc.dao.daoproject.annotation.PrimaryKey;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author Michael
  */
-@Name(name = "users")
-public class User {
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
 
     @Id
-    @PrimaryKey
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     private Integer id;
     private String login;
     private String password;

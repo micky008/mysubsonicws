@@ -1,18 +1,25 @@
 package com.msc.mysubsonicws.entity;
 
-import com.msc.dao.daoproject.annotation.Id;
-import com.msc.dao.daoproject.annotation.Name;
-import com.msc.dao.daoproject.annotation.PrimaryKey;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author Michael
  */
-@Name(name = "players")
-public class Player {
+@Entity
+@Table(name = "players")
+public class Player implements Serializable {
 
-    @PrimaryKey
     @Id
+    @Column(name = "player_id")
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     private Integer id;
 
     private String nom;
@@ -45,5 +52,4 @@ public class Player {
         this.nom = nom;
     }
 
-    
 }

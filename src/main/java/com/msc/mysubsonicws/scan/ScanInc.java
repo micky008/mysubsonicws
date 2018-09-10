@@ -1,6 +1,6 @@
 package com.msc.mysubsonicws.scan;
 
-import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
@@ -66,10 +66,10 @@ public class ScanInc {
             }
         }
         if (!lm.isEmpty()) {
-            FactoryDAO.musiqueDAO.insert(lm);
+            //FactoryDAO.musiqueDAO.insert(lm);
         }
         if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
+            //FactoryDAO.folderDAO.insert(lf);
         }
     }
 
@@ -107,10 +107,10 @@ public class ScanInc {
 
         }
         if (!lm.isEmpty()) {
-            FactoryDAO.musiqueDAO.insert(lm);
+            //FactoryDAO.musiqueDAO.insert(lm);
         }
         if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
+            //FactoryDAO.folderDAO.insert(lf);
         }
     }
 
@@ -139,7 +139,7 @@ public class ScanInc {
 
     public void launchScan(File initialFolder) throws SQLException {
         readFolder(initialFolder);
-        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
+        //FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }
 
 }

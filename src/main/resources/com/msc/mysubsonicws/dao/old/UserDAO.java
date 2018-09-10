@@ -1,17 +1,14 @@
-package com.msc.mysubsonicws.dao;
+package com.msc.mysubsonicws.dao.old;
 
-
-import com.msc.mysubsonicws.dao.old.*;
-import com.msc.mysubsonicws.entity.PlayerMusicPlace;
-import java.sql.Connection;
+import com.msc.mysubsonicws.entity.User;
 
 /**
  *
  * @author Michael
  */
-public class PlayerMusiquePlaceDAO { //extends GenericDaoImpl<PlayerMusicPlace> {
+public class UserDAO { //extends GenericDaoImpl<User>{
 //
-//    public PlayerMusiquePlaceDAO() {
+//    public UserDAO() {
 //        super(DAO.getConnection());
 //    }
 //
@@ -24,6 +21,5 @@ public class PlayerMusiquePlaceDAO { //extends GenericDaoImpl<PlayerMusicPlace> 
 //    protected String convertLogicCustom(Class<?> type, Object o) {
 //        return null;
 //    }
-//
-//        
+
 }

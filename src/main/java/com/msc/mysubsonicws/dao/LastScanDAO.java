@@ -1,37 +1,62 @@
 package com.msc.mysubsonicws.dao;
 
-import com.msc.dao.daoproject.generic.DAO;
-import com.msc.dao.daoproject.generic.GenericDaoImpl;
 import com.msc.mysubsonicws.entity.LastScan;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import org.hibernate.Session;
 
 /**
  *
  * @author Michael
  */
-public class LastScanDAO extends GenericDaoImpl<LastScan> {
-
-    public LastScanDAO() {
-        super(DAO.getConnection());
-    }
-
-    @Override
-    protected Object convertFillObjectCustom(Class<?> clazz, Object res) {
-        return null;
-    }
-
-    @Override
-    protected String convertLogicCustom(Class<?> type, Object o) {
-        return null;
-    }
+public class LastScanDAO {
 
     public BigInteger getLastScan() throws SQLException {
-        return getAll().get(0).getLastScan();
+        BigInteger bi = null;
+
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        LastScan ls = (LastScan) session.createQuery("from LastScan").uniqueResult();
+        bi = ls.getLastScan();
+
+        session.getTransaction().commit();
+        session.close();
+        return bi;
     }
 
     public void update(BigInteger bi) throws SQLException {
-        this.preparedUpdate(new LastScan(bi), "");
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        LastScan ls = (LastScan) session.createQuery("from LastScan").uniqueResult();
+
+        ls.setLastScan(bi);
+        session.save(ls);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void insert(LastScan m) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.save(m);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void insert(BigInteger m) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        LastScan ls = new LastScan(m);
+
+        session.save(ls);
+
+        session.getTransaction().commit();
+        session.close();
     }
 
 }

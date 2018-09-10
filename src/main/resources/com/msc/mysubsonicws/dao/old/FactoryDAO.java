@@ -1,4 +1,4 @@
-package com.msc.mysubsonicws.dao;
+package com.msc.mysubsonicws.dao.old;
 
 /**
  *
@@ -12,5 +12,6 @@ public class FactoryDAO {
     public static final PlayerMusiquePlaceDAO playerMusicPlayerDAO = new PlayerMusiquePlaceDAO();
     public static final UserDAO userDAO = new UserDAO();
     public static final LastScanDAO lsatScanDAO = new LastScanDAO();
-
+    
+    
 }
