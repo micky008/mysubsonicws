@@ -1,5 +1,7 @@
 package com.msc.mysubsonicws.controllers;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.entity.Musique;
 import com.msc.mysubsonicws.helpers.MediaStreamer;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,12 +10,14 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
@@ -25,24 +29,46 @@ import javax.ws.rs.core.StreamingOutput;
 public class MusiqueController {
 
     final int chunk_size = 1024 * 1024; // 1MB chunks
-    private final File audio;
 
-    public MusiqueController() {
-        audio = new File("c:/t1.flac");
-    }
-
-    //A simple way to verify if the server supports range headers.
-    @HEAD
-    @Produces("audio/flac")
-    public Response header() {
-        return Response.ok().status(206).header(HttpHeaders.CONTENT_LENGTH, audio.length()).build();
+    @GET
+    @Path("resolve/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Musique resolve(@PathParam("id") String id) throws Exception {
+        return FactoryDAO.musiqueDAO.getMusiqueById(id);
     }
 
     @GET
-    @Path("truc")
-    @Produces("audio/flac")
-    public Response streamAudio(@HeaderParam("Range") String range) throws Exception {
-        return buildStream(audio, range);
+    @Path("folder/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Musique> getMusiqueByFolder(@PathParam("id") String id) throws Exception {
+        return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);
+    }
+
+    @GET
+    @Path("id/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Musique getMusiqueById(@PathParam("id") String id) throws Exception {
+        Musique m = resolve(id);
+        m.setFullName(null);
+        m.setType(null);
+        return m;
+    }
+
+    @GET
+    @Path("player/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Musique> getMusiqueByPlayer(@PathParam("id") Integer id) throws Exception {
+        return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);
+    }
+
+    @GET
+    @Path("stream/{id}")
+    //@Produces("audio/flac")
+    public Response streamAudio(@HeaderParam("Range") String range, @PathParam("id") String id) throws Exception {
+        Musique m = this.resolve(id);
+        Response.ResponseBuilder r = buildStream(new File(m.getFullName()), range);
+        r.header(HttpHeaders.CONTENT_TYPE, "audio/" + m.getType());
+        return r.build();
     }
 
     /**
@@ -54,7 +80,7 @@ public class MusiqueController {
      * @return Streaming output
      * @throws Exception IOException if an error occurs in streaming.
      */
-    private Response buildStream(final File asset, final String range) throws Exception {
+    private Response.ResponseBuilder buildStream(final File asset, final String range) throws Exception {
         // range not requested : Firefox does not send range headers
         if (range == null) {
             StreamingOutput streamer = output -> {
@@ -62,7 +88,7 @@ public class MusiqueController {
                     inputChannel.transferTo(0, inputChannel.size(), outputChannel);
                 }
             };
-            return Response.ok(streamer).status(200).header(HttpHeaders.CONTENT_LENGTH, asset.length()).build();
+            return Response.ok(streamer).status(200).header(HttpHeaders.CONTENT_LENGTH, asset.length());
         }
 
         String[] ranges = range.split("=")[1].split("-");
@@ -91,7 +117,7 @@ public class MusiqueController {
                 .header("Content-Range", responseRange)
                 .header(HttpHeaders.CONTENT_LENGTH, streamer.getLenth())
                 .header(HttpHeaders.LAST_MODIFIED, new Date(asset.lastModified()));
-        return res.build();
+        return res;
     }
 
 }

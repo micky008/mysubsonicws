@@ -11,15 +11,15 @@ import javax.ws.rs.core.Response;
  *
  * @author Michael
  */
-@Path("rest/users")
-public class UserController {
+@Path("echo")
+public class TestController {
     
     @POST
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("insert")
-    public Response insert(){
-        return null;
+    
+    public String insert(String json){
+        return json;
     }
     
     

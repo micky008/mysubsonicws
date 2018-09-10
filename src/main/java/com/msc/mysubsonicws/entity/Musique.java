@@ -33,6 +33,7 @@ public class Musique {
     @Name(name = "fullname")
     private String fullName;
 
+    private String type;
 
 
     /**
@@ -150,6 +151,20 @@ public class Musique {
      */
     public void setIdFolder(String idFolder) {
         this.idFolder = idFolder;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
 }
