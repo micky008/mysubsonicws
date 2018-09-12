@@ -1,8 +1,10 @@
 package com.msc.mysubsonicws.scan;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +57,9 @@ public class ScanInc {
                 lf.add(folder);
             } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
+                m.setId(UUID.randomUUID().toString());
+                m.setFolderId(folder.getId());
                 lm.add(m);
-                System.out.println("id=" + rootUuid.toString() + " - " + file.getAbsolutePath());
             } else if (isGoodFile(file, extentionPictureFiles)) {
                 if (folder != null) {
                     folder.setImgAlbum(file.getAbsolutePath());
@@ -64,10 +67,10 @@ public class ScanInc {
             }
         }
         if (!lm.isEmpty()) {
-            //FactoryDAO.musiqueDAO.insert(lm);
+            FactoryDAO.musiqueDAO.insert(lm);
         }
         if (!lf.isEmpty()) {
-            //FactoryDAO.folderDAO.insert(lf);
+            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
@@ -95,20 +98,20 @@ public class ScanInc {
                 lf.add(folder);
             } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
+                m.setId(UUID.randomUUID().toString());
+                m.setFolderId(folder.getId());
                 lm.add(m);
-                System.out.println("rootId=" + rootid.toString() + " - id =" + id.toString() + " - " + file.getAbsolutePath());
             } else if (isGoodFile(file, extentionPictureFiles)) {
                 if (folder != null) {
                     folder.setImgAlbum(file.getAbsolutePath());
                 }
             }
-
         }
         if (!lm.isEmpty()) {
-            //FactoryDAO.musiqueDAO.insert(lm);
+            FactoryDAO.musiqueDAO.insert(lm);
         }
         if (!lf.isEmpty()) {
-            //FactoryDAO.folderDAO.insert(lf);
+            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
@@ -129,15 +132,14 @@ public class ScanInc {
         if (args.length == 0) {
             System.out.println("folder obligatoire ! Merci");
             return;
-        }
-        //long debut = System.currentTimeMillis();
+        }        
         new ScanInc().readFolder(new File(args[0]));
 
     }
 
     public void launchScan(File initialFolder) throws SQLException {
         readFolder(initialFolder);
-        //FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
+        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }
 
 }

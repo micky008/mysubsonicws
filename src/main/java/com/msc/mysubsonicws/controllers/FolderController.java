@@ -1,5 +1,6 @@
 package com.msc.mysubsonicws.controllers;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.helpers.WSConfig;
 import com.msc.mysubsonicws.scan.ScanInitial;
@@ -13,18 +14,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+/*
+  GET /rest/folders/id/{id} Récupère tous les folders parents 
+  GET /rest/folders/parent/{idParent} Récupère tous les folders fils a partir du parent 
+  GET /rest/folders/root Récupère tous les folders pour affichage 
+  GET /rest/folders/scan/inc Scan incrementale. Methode a appelé quand on a ajoute des musiques 
+  GET /rest/folders/scan/init Delete la base de musique ainsi que les musique des players et rescan depuis 0 le folder de musique
+ */
 /**
- *
- *
- *
- * GET /rest/folders/id/{id} Récupère tous les folders parents GET
- * /rest/folders/parent/{idParent} Récupère tous les folders fils a partir du
- * parent GET /rest/folders/root Récupère tous les folders pour affichage GET
- * /rest/folders/scan/inc Scan incrementale. Methode a appelé quand on ajoute
- * des musiques GET /rest/folders/scan/init Delete la base de musique ainsi que
- * les musique des players et rescan depuis 0 le folder de musique
- *
- *
  * @author Michael
  */
 @Path("rest/folders")
@@ -34,24 +31,21 @@ public class FolderController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getNextFolders(@PathParam("id") String id) {
-        //return FactoryDAO.folderDAO.getNextFolders(id);
-        return null;
+        return FactoryDAO.folderDAO.getNextFolders(id);
     }
 
     @Path("parent/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getParentFolders(String id) {
-        //return FactoryDAO.folderDAO.getParentFolders(id);
-        return null;
+        return FactoryDAO.folderDAO.getParentFolders(id);
     }
 
     @Path("root")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getRootFolders() {
-        //return FactoryDAO.folderDAO.getRootFolders();
-        return null;
+        return FactoryDAO.folderDAO.getRootFolders();
     }
 
     @Path("scan/initial")
@@ -73,8 +67,7 @@ public class FolderController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> scanInc() {
-        //return FactoryDAO.folderDAO.getRootFolders();
-        return null;
+        return FactoryDAO.folderDAO.getRootFolders();        
     }
 
 }

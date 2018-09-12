@@ -1,5 +1,6 @@
 package com.msc.mysubsonicws.controllers;
 
+import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Musique;
 import com.msc.mysubsonicws.helpers.MediaStreamer;
 import java.io.File;
@@ -24,7 +25,7 @@ import javax.ws.rs.core.StreamingOutput;
  *
  * @author Michael
  */
-@Path("/musique")
+@Path("rest/musiques")
 public class MusiqueController {
 
     final int chunk_size = 1024 * 1024; // 1MB chunks
@@ -33,16 +34,14 @@ public class MusiqueController {
     @Path("resolve/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Musique resolve(@PathParam("id") String id) throws Exception {
-        //return FactoryDAO.musiqueDAO.getMusiqueById(id);
-        return null;
+        return FactoryDAO.musiqueDAO.getMusiqueById(id);        
     }
 
     @GET
     @Path("folder/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByFolder(@PathParam("id") String id) throws Exception {
-        //return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);
-        return null;
+        return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);        
     }
 
     @GET
@@ -52,6 +51,7 @@ public class MusiqueController {
         Musique m = resolve(id);
         m.setFullName(null);
         m.setType(null);
+        m.setFolderId(null);
         return m;
     }
 
@@ -59,8 +59,7 @@ public class MusiqueController {
     @Path("player/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByPlayer(@PathParam("id") Integer id) throws Exception {
-        //return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);
-        return null;
+        return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);        
     }
 
     @GET

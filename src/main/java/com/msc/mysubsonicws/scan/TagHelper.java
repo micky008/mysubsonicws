@@ -19,14 +19,9 @@ public class TagHelper {
         Musique musique = new Musique();
         AudioFile f = null;
         try {
-
             f = AudioFileIO.read(audioFile);
             Tag tag = f.getTag();
-            //Mp3File mp3 = new Mp3File(audioFile.getAbsolutePath());
-
-            //musique.setBiterate(tag.getFirst(FieldKey.BPM));
             musique.setFullName(audioFile.getAbsolutePath().replace('\\', '/'));
-
             try {
                 musique.setAlbum(tag.getFirst(FieldKey.ALBUM));
             } catch (Throwable e) {
@@ -60,8 +55,8 @@ public class TagHelper {
             String type = audioFile.getName().substring(pos + 1);
             musique.setType(type);
         }
-        if (musique.getTitre() == null) {
-            String tst = audioFile.getName().substring(0, audioFile.getName().length() - musique.getType().length() + 1);
+        if (musique.getTitre() == null || musique.getTitre().isEmpty()) {
+            String tst = audioFile.getName().substring(0, audioFile.getName().length() - (musique.getType().length()+1) );
             musique.setTitre(tst);
         }
 

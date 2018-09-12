@@ -27,7 +27,7 @@ public class ScanInitial {
 
     protected static synchronized ExecutorService getExecutor() {
         if (executor == null) {
-            executor = Executors.newFixedThreadPool(2);
+            executor = Executors.newCachedThreadPool();
         }
         return executor;
     }
@@ -42,7 +42,6 @@ public class ScanInitial {
         folder.setName(rootFolder.getName());
         folder.setPathname(rootFolder.getAbsolutePath());
         folder = FactoryDAO.folderDAO.insert(folder);
-        System.out.println("in add root folder");
         for (File file : rootFolder.listFiles()) {
             if (file.isDirectory()) {
                 getExecutor().submit(new Thread() {
@@ -63,13 +62,11 @@ public class ScanInitial {
             }
         }
         if (!lm.isEmpty()) {
-            System.out.println("in add root musique");
             FactoryDAO.musiqueDAO.insert(lm);
         }
     }
 
     private void scan(File parentFolderFile, UUID rootid, UUID id) throws SQLException {
-        System.out.println("in scan");
         Folder folder = new Folder();
         folder.setId(id.toString());
         folder.setIdParent(rootid.toString());
@@ -78,7 +75,6 @@ public class ScanInitial {
         folder = FactoryDAO.folderDAO.insert(folder);
         for (File file : parentFolderFile.listFiles()) {
             if (file.isDirectory()) {
-                System.out.println("in scan is directory");
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
@@ -93,25 +89,13 @@ public class ScanInitial {
             } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
                 m.setFolderId(folder.getId());
-                m.setId(UUID.randomUUID().toString());                
-                System.out.println(m.toString());
+                m.setId(UUID.randomUUID().toString());
                 FactoryDAO.musiqueDAO.insert(m);
             } else if (isGoodFile(file, extentionPictureFiles)) {
                 folder.setImgAlbum(file.getAbsolutePath());
                 FactoryDAO.folderDAO.update(folder);
-            } else {
-                System.out.println("file=" + file.getAbsolutePath());
             }
-
         }
-//        if (!lm.isEmpty()) {
-//            System.out.println("in add musique folder");
-//            FactoryDAO.musiqueDAO.insert(lm);
-//        }
-//        if (!lf.isEmpty()) {
-//            System.out.println("in add folder");
-//            FactoryDAO.folderDAO.insert(lf);
-//        }
     }
 
     private boolean isGoodFile(File file, String[] exts) { //fomctionne pour l'audio et la video
@@ -124,6 +108,11 @@ public class ScanInitial {
         return false;
     }
 
+    public void launchScan(File initialFolder) throws SQLException {
+        readFolder(initialFolder);
+        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -133,14 +122,6 @@ public class ScanInitial {
             return;
         }
         MySessionFactory.setUp();
-        //long debut = System.currentTimeMillis();
         new ScanInitial().launchScan(new File(args[0]));
-        //FactoryDAO.folderDAO.insertTest();
     }
-
-    public void launchScan(File initialFolder) throws SQLException {
-        readFolder(initialFolder);
-        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
-    }
-
 }
