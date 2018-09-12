@@ -1,8 +1,5 @@
 package com.msc.mysubsonicws.dao;
 
-import com.msc.mysubsonicws.dao.old.*;
-import com.msc.mysubsonicws.entity.User;
-
 /**
  *
  * @author Michael

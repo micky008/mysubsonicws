@@ -1,6 +1,5 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Musique;
 import com.msc.mysubsonicws.helpers.MediaStreamer;
 import java.io.File;

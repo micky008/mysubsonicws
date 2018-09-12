@@ -1,10 +1,8 @@
 package com.msc.mysubsonicws.scan;
 
-import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

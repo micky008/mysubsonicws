@@ -3,10 +3,7 @@ package com.msc.mysubsonicws.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -21,22 +18,28 @@ public class Musique implements Serializable {
     @Column(name = "musique_id")
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id", nullable = false)
-    private Folder folder;
+    @Column(name = "folder_id", nullable = false)
+    private String folderId;
 
+    @Column(nullable = true)
     private String titre;
 
+    @Column(nullable = true)
     private String artiste;
 
+    @Column(nullable = true)
     private String genre;
 
+    @Column(nullable = true)
     private String album;
 
-    private String year;
+    @Column(nullable = true)
+    private String annee;
 
+    @Column(nullable = false)
     private String fullName;
 
+    @Column(nullable = false)
     private String type;
 
     /**
@@ -96,20 +99,6 @@ public class Musique implements Serializable {
     }
 
     /**
-     * @return the year
-     */
-    public String getYear() {
-        return year;
-    }
-
-    /**
-     * @param year the year to set
-     */
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    /**
      * @return the fullName
      */
     public String getFullName() {
@@ -125,7 +114,7 @@ public class Musique implements Serializable {
 
     @Override
     public String toString() {
-        return getId() + " " + getFolder().getId() + " " + getTitre() + " " + getArtiste();
+        return getId() + " " + getFolderId()+ " " + getTitre() + " " + getArtiste();
     }
 
     /**
@@ -157,17 +146,33 @@ public class Musique implements Serializable {
     }
 
     /**
-     * @return the folder
+     * @return the folderId
      */
-    public Folder getFolder() {
-        return folder;
+    public String getFolderId() {
+        return folderId;
     }
 
     /**
-     * @param folder the folder to set
+     * @param folderId the folderId to set
      */
-    public void setFolder(Folder folder) {
-        this.folder = folder;
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
     }
+
+    /**
+     * @return the annee
+     */
+    public String getAnnee() {
+        return annee;
+    }
+
+    /**
+     * @param annee the annee to set
+     */
+    public void setAnnee(String annee) {
+        this.annee = annee;
+    }
+
+    
 
 }

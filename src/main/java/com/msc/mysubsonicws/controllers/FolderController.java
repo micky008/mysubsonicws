@@ -1,6 +1,5 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.msc.mysubsonicws.dao.old.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.helpers.WSConfig;
 import com.msc.mysubsonicws.scan.ScanInitial;

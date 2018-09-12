@@ -1,62 +1,34 @@
 package com.msc.mysubsonicws.dao;
 
+import com.msc.mysubsonicws.dao.abstractdao.AbstractDAO;
 import com.msc.mysubsonicws.entity.LastScan;
 import java.math.BigInteger;
 import java.sql.SQLException;
-import org.hibernate.Session;
 
 /**
  *
  * @author Michael
  */
-public class LastScanDAO {
+public class LastScanDAO extends AbstractDAO<LastScan> {
 
     public BigInteger getLastScan() throws SQLException {
-        BigInteger bi = null;
-
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
-        LastScan ls = (LastScan) session.createQuery("from LastScan").uniqueResult();
-        bi = ls.getLastScan();
-
-        session.getTransaction().commit();
-        session.close();
-        return bi;
+        LastScan ls = getObject("from LastScan");
+        return ls.getLastScan();
     }
 
     public void update(BigInteger bi) throws SQLException {
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
-        LastScan ls = (LastScan) session.createQuery("from LastScan").uniqueResult();
-
+        LastScan ls = this.getObject("from LastScan");
+        if (ls == null) {
+            ls = new LastScan();
+        }
         ls.setLastScan(bi);
-        session.save(ls);
-        session.getTransaction().commit();
-        session.close();
-    }
-
-    public void insert(LastScan m) {
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
-        session.save(m);
-
-        session.getTransaction().commit();
-        session.close();
+        super.insert(ls);
     }
 
     public void insert(BigInteger m) {
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
         LastScan ls = new LastScan(m);
+        super.insert(ls);
 
-        session.save(ls);
-
-        session.getTransaction().commit();
-        session.close();
     }
 
 }

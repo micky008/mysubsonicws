@@ -1,6 +1,7 @@
 package com.msc.mysubsonicws.scan;
 
 import com.msc.mysubsonicws.dao.FactoryDAO;
+import com.msc.mysubsonicws.dao.MySessionFactory;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
 import java.io.File;
@@ -19,14 +20,14 @@ import java.util.logging.Logger;
  * @author Michael
  */
 public class ScanInitial {
-    
+
     private final String extentionMediaFiles[] = {"mp3", "flac", "ogg"};
     private final String extentionPictureFiles[] = {"jpg", "png"};
     protected static ExecutorService executor = null;
 
     protected static synchronized ExecutorService getExecutor() {
         if (executor == null) {
-            executor = Executors.newCachedThreadPool();
+            executor = Executors.newFixedThreadPool(2);
         }
         return executor;
     }
@@ -34,16 +35,16 @@ public class ScanInitial {
     private void readFolder(File rootFolder) throws SQLException {
         UUID rootUuid = UUID.fromString(Folder.ROOT_ID);
         List<Musique> lm = new ArrayList<>();
-        List<Folder> lf = new ArrayList<>();
         Folder folder = null;
+        folder = new Folder();
+        folder.setId(rootUuid.toString());
+        folder.setIdParent(null);
+        folder.setName(rootFolder.getName());
+        folder.setPathname(rootFolder.getAbsolutePath());
+        folder = FactoryDAO.folderDAO.insert(folder);
+        System.out.println("in add root folder");
         for (File file : rootFolder.listFiles()) {
-            folder = null;
             if (file.isDirectory()) {
-                folder = new Folder();
-                folder.setId(rootUuid.toString());
-                folder.setIdParent(null);
-                folder.setName(file.getName());
-                folder.setPathname(file.getAbsolutePath());
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
@@ -54,36 +55,30 @@ public class ScanInitial {
                         }
                     }
                 });
-                lf.add(folder);
             } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
+                m.setFolderId(folder.getId());
+                m.setId(UUID.randomUUID().toString());
                 lm.add(m);
-                System.out.println("id=" + rootUuid.toString() + " - " + file.getAbsolutePath());
-            } else if (isGoodFile(file, extentionPictureFiles)) {
-                if (folder != null) {
-                    folder.setImgAlbum(file.getAbsolutePath());
-                }
             }
         }
         if (!lm.isEmpty()) {
+            System.out.println("in add root musique");
             FactoryDAO.musiqueDAO.insert(lm);
-        }
-        if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
-    private void scan(File parentFolder, UUID rootid, UUID id) throws SQLException {
-        List<Musique> lm = new ArrayList<>();
-        List<Folder> lf = new ArrayList<>();
-        Folder folder = null;
-        for (File file : parentFolder.listFiles()) {
+    private void scan(File parentFolderFile, UUID rootid, UUID id) throws SQLException {
+        System.out.println("in scan");
+        Folder folder = new Folder();
+        folder.setId(id.toString());
+        folder.setIdParent(rootid.toString());
+        folder.setName(parentFolderFile.getName());
+        folder.setPathname(parentFolderFile.getAbsolutePath());
+        folder = FactoryDAO.folderDAO.insert(folder);
+        for (File file : parentFolderFile.listFiles()) {
             if (file.isDirectory()) {
-                folder = new Folder();
-                folder.setId(id.toString());
-                folder.setIdParent(rootid.toString());
-                folder.setName(file.getName());
-                folder.setPathname(file.getAbsolutePath());
+                System.out.println("in scan is directory");
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
@@ -94,24 +89,29 @@ public class ScanInitial {
                         }
                     }
                 });
-                lf.add(folder);
+
             } else if (isGoodFile(file, extentionMediaFiles)) {
                 Musique m = TagHelper.getInfo(file);
-                lm.add(m);
-                System.out.println("rootId=" + rootid.toString() + " - id =" + id.toString() + " - " + file.getAbsolutePath());
+                m.setFolderId(folder.getId());
+                m.setId(UUID.randomUUID().toString());                
+                System.out.println(m.toString());
+                FactoryDAO.musiqueDAO.insert(m);
             } else if (isGoodFile(file, extentionPictureFiles)) {
-                if (folder != null) {
-                    folder.setImgAlbum(file.getAbsolutePath());
-                }
+                folder.setImgAlbum(file.getAbsolutePath());
+                FactoryDAO.folderDAO.update(folder);
+            } else {
+                System.out.println("file=" + file.getAbsolutePath());
             }
 
         }
-        if (!lm.isEmpty()) {
-            FactoryDAO.musiqueDAO.insert(lm);
-        }
-        if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
-        }
+//        if (!lm.isEmpty()) {
+//            System.out.println("in add musique folder");
+//            FactoryDAO.musiqueDAO.insert(lm);
+//        }
+//        if (!lf.isEmpty()) {
+//            System.out.println("in add folder");
+//            FactoryDAO.folderDAO.insert(lf);
+//        }
     }
 
     private boolean isGoodFile(File file, String[] exts) { //fomctionne pour l'audio et la video
@@ -127,14 +127,15 @@ public class ScanInitial {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws Exception {
         if (args.length == 0) {
             System.out.println("folder obligatoire ! Merci");
             return;
         }
+        MySessionFactory.setUp();
         //long debut = System.currentTimeMillis();
-        new ScanInitial().readFolder(new File(args[0]));
-
+        new ScanInitial().launchScan(new File(args[0]));
+        //FactoryDAO.folderDAO.insertTest();
     }
 
     public void launchScan(File initialFolder) throws SQLException {

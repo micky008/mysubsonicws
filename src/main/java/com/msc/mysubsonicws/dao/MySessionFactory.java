@@ -25,7 +25,7 @@ public class MySessionFactory {
         }
     }
     
-    public static SessionFactory getInstance(){
+    public synchronized static SessionFactory getInstance(){
         if (sessionFactory == null){
             setUp();
         }

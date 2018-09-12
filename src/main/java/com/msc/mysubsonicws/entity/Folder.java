@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "folders")
 public class Folder implements Serializable {
 
+    @Transient
     public static final String ROOT_ID = "00000000-0000-0000-0000-000000000001";
 
     @Id
