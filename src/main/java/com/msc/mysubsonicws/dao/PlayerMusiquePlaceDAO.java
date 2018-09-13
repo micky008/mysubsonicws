@@ -1,24 +1,17 @@
 package com.msc.mysubsonicws.dao;
 
+import com.msc.mysubsonicws.dao.abstractdao.AbstractDAO;
+import com.msc.mysubsonicws.entity.PlayerMusiquePlace;
+import java.util.List;
+
 /**
  *
  * @author Michael
  */
-public class PlayerMusiquePlaceDAO { //extends GenericDaoImpl<PlayerMusicPlace> {
-//
-//    public PlayerMusiquePlaceDAO() {
-//        super(DAO.getConnection());
-//    }
-//
-//    @Override
-//    protected Object convertFillObjectCustom(Class<?> clazz, Object res) {
-//        return null;
-//    }
-//
-//    @Override
-//    protected String convertLogicCustom(Class<?> type, Object o) {
-//        return null;
-//    }
-//
-//        
+public class PlayerMusiquePlaceDAO extends AbstractDAO<PlayerMusiquePlace> {
+    
+    public List<PlayerMusiquePlace> getPmpByPlayer(Integer idPlayer){
+        return this.getObjects("select pmp from PlayerMusiquePlace pmp, Player p where p.id= "+idPlayer);
+    }
+    
 }

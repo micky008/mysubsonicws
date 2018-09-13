@@ -1,9 +1,9 @@
 package com.msc.mysubsonicws.controllers;
 
 import com.google.gson.Gson;
+import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Player;
-import com.msc.mysubsonicws.entity.PlayerMusicPlace;
-import java.lang.reflect.Field;
+import com.msc.mysubsonicws.entity.PlayerMusiquePlace;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,15 +29,15 @@ public class PlayerController {
     @Post("/rest/players/player/update")
     @Post("/rest/players/pmp/update")
     @Post("/rest/players/pmp/insert")
-    @Get("/rest/players/pmp/{idPlayer}") //recup le player
+    @Get("/rest/players/pmp/{idPlayer}") //recup les pmp by player
     @Post("/rest/players/pmp/delete") //delete des musique du player
      */
     @GET
     @Path("players")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Player> getAllPlayers() throws SQLException {
-       // return FactoryDAO.playerDAO.getAll();
-       return null;
+        return FactoryDAO.playerDAO.getAll();
+
     }
 
     @POST
@@ -50,10 +50,7 @@ public class PlayerController {
         }
         Gson gson = new Gson();
         Player[] ps = gson.fromJson(playerStr, Player[].class);
-        Player player = ps[0];
-        //FactoryDAO.playerDAO.insert(player);
-        
-        return player;
+        return FactoryDAO.playerDAO.insert(ps[0]);
     }
 
     @POST
@@ -66,64 +63,53 @@ public class PlayerController {
         }
         Gson gson = new Gson();
         Player player = gson.fromJson(playerStr, Player.class);
-        //FactoryDAO.playerDAO.update(player);
-        return player;
+        return FactoryDAO.playerDAO.update(player);
     }
 
     @POST
     @Path("player/delete")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Player> deletePlayer(String playerStr) throws SQLException {
+    public Player deletePlayer(String playerStr) throws SQLException {
         if (playerStr == null || playerStr.isEmpty()) {
             return null;
         }
         Gson gson = new Gson();
-        Player[] ps = gson.fromJson(playerStr, Player[].class);
-        List<Player> lps = Arrays.asList(ps);
-        //FactoryDAO.playerDAO.delete(lps);
-        return lps;
+        Player p = gson.fromJson(playerStr, Player.class);
+        return FactoryDAO.playerDAO.delete(p);
     }
 
     @GET
-    @Path("pmp/{id}")
+    @Path("pmp/{idPlayer}")
     @Produces(MediaType.APPLICATION_JSON)
-    public PlayerMusicPlace getPmp(@PathParam("id") Integer id) throws SQLException {
-//        Field f = FieldUtils.getField(PlayerMusicPlace.class, "playerId");
-//        SearchById sbi = new SearchById(f, id);
-//        List<PlayerMusicPlace> l = FactoryDAO.playerMusicPlayerDAO.getObjectsById(sbi);
-//        return l != null ? l.get(0) : null;
-return null;
+    public List<PlayerMusiquePlace> getPmp(@PathParam("idPlayer") Integer id) throws SQLException {
+        return FactoryDAO.playerMusicPlayerDAO.getPmpByPlayer(id);
     }
 
-    
     @POST
     @Path("pmp/insert")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<PlayerMusicPlace> insertPmp(String playerStr) throws SQLException {
+    public PlayerMusiquePlace[] insertPmp(String playerStr) throws SQLException {
         if (playerStr == null || playerStr.isEmpty()) {
             return null;
         }
         Gson gson = new Gson();
-        PlayerMusicPlace[] ps = gson.fromJson(playerStr, PlayerMusicPlace[].class);        
-        //FactoryDAO.playerMusicPlayerDAO.insert(ps);
-       // return ps;
-       return null;
+        PlayerMusiquePlace[] ps = gson.fromJson(playerStr, PlayerMusiquePlace[].class);
+        return FactoryDAO.playerMusicPlayerDAO.insert(ps);
     }
 
     @POST
     @Path("pmp/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusicPlace updatePmp(String playerStr) throws SQLException {
+    public PlayerMusiquePlace[] updatePmp(String playerStr) throws SQLException {
         if (playerStr == null || playerStr.isEmpty()) {
             return null;
         }
         Gson gson = new Gson();
-        PlayerMusicPlace player = gson.fromJson(playerStr, PlayerMusicPlace.class);
-        //FactoryDAO.playerDAO.update(player);
-        return player;
+        PlayerMusiquePlace[] players = gson.fromJson(playerStr, PlayerMusiquePlace[].class);
+        return FactoryDAO.playerMusicPlayerDAO.update(players);
     }
-    
+
 }

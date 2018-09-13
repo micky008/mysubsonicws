@@ -14,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "player_musique_place")
-public class PlayerMusicPlace implements Serializable {
+public class PlayerMusiquePlace implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,6 +26,7 @@ public class PlayerMusicPlace implements Serializable {
     @JoinColumn(name = "musique_id", nullable = false)
     private Musique musique;
 
+    @Id
     private Integer place;
 
     /**

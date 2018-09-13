@@ -25,18 +25,6 @@ public class AbstractDAO<T> {
         return f;
     }
 
-    public synchronized T update(T m) {
-
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
-        session.update(m);
-
-        session.getTransaction().commit();
-        session.close();
-        return m;
-    }
-    
     public synchronized List<T> insert(List<T> lm) {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
@@ -48,6 +36,93 @@ public class AbstractDAO<T> {
         session.getTransaction().commit();
         session.close();
         return lm;
+    }
+
+    public synchronized T[] insert(T[] lm) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        for (T f : lm) {
+            session.save(f);
+        }
+
+        session.getTransaction().commit();
+        session.close();
+        return lm;
+    }
+
+    public synchronized T update(T m) {
+
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.update(m);
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
+    }
+
+    public synchronized List<T> update(List<T> m) {
+
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        for (T t : m) {
+            session.update(m);
+        }
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
+    }
+
+    public synchronized T[] update(T[] m) {
+
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        for (T t : m) {
+            session.update(m);
+        }
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
+    }
+
+    public synchronized T delete(T m) {
+
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.delete(m);
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
+    }
+
+    public synchronized List<T> delete(List<T> m) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.delete(m);
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
+    }
+
+    public synchronized T[] delete(T[] m) {
+        Session session = MySessionFactory.getInstance().openSession();
+        session.beginTransaction();
+
+        session.delete(m);
+
+        session.getTransaction().commit();
+        session.close();
+        return m;
     }
 
     protected T getObject(String hql) {

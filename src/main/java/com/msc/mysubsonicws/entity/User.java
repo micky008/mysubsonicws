@@ -1,6 +1,8 @@
 package com.msc.mysubsonicws.entity;
 
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.util.Base64;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -64,4 +66,19 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public static String convertPassword(String password) {
+        try{
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(password.getBytes("UTF-8"));
+            return Base64.getEncoder().encodeToString(crypt.digest());
+        }catch(Exception e){
+        }
+        return null;
+    }
+
+    public String convertPassword(){
+        return convertPassword(this.password);
+    }
+    
 }

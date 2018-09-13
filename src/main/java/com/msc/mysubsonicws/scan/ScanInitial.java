@@ -103,9 +103,7 @@ public class ScanInitial {
 
     public void launchScan(File initialFolder) throws SQLException {
         readFolder(initialFolder);
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, -2);
-        FactoryDAO.lsatScanDAO.update(new BigInteger("" + cal.getTimeInMillis()));
+        FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }
 
     /**
