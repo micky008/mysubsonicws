@@ -36,7 +36,7 @@ public class AbstractDAO<T> {
         session.close();
         return m;
     }
-
+    
     public synchronized List<T> insert(List<T> lm) {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
@@ -50,7 +50,7 @@ public class AbstractDAO<T> {
         return lm;
     }
 
-    public T getObject(String hql) {
+    protected T getObject(String hql) {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
         T obj = (T) session.createQuery(hql).uniqueResult();
@@ -59,7 +59,7 @@ public class AbstractDAO<T> {
         return obj;
     }
 
-    public List<T> getObjects(String hql) {
+    protected List<T> getObjects(String hql) {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
         List<T> obj = session.createQuery(hql).list();

@@ -51,7 +51,7 @@ public class MusiqueController {
         Musique m = resolve(id);
         m.setFullName(null);
         m.setType(null);
-        m.setFolderId(null);
+        m.setFolderId(null);        
         return m;
     }
 
@@ -64,7 +64,6 @@ public class MusiqueController {
 
     @GET
     @Path("stream/{id}")
-    //@Produces("audio/flac")
     public Response streamAudio(@HeaderParam("Range") String range, @PathParam("id") String id) throws Exception {
         Musique m = this.resolve(id);
         Response.ResponseBuilder r = buildStream(new File(m.getFullName()), range);

@@ -3,10 +3,16 @@ package com.msc.mysubsonicws.scan;
 import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.entity.Musique;
+import com.msc.mysubsonicws.helpers.Constantes;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -20,8 +26,6 @@ import java.util.logging.Logger;
  */
 public class ScanInc {
 
-    private final String extentionMediaFiles[] = {"mp3", "flac", "ogg"};
-    private final String extentionPictureFiles[] = {"jpg", "png"};
     protected static ExecutorService executor = null;
 
     protected static synchronized ExecutorService getExecutor() {
@@ -31,87 +35,86 @@ public class ScanInc {
         return executor;
     }
 
-    private void readFolder(File rootFolder) throws SQLException {
+    private void readFolder(File rootFolder, final BigInteger lastScan) throws SQLException {
         UUID rootUuid = UUID.fromString(Folder.ROOT_ID);
-        List<Musique> lm = new ArrayList<>();
-        List<Folder> lf = new ArrayList<>();
-        Folder folder = null;
+        Folder folder = new Folder();
+        folder.setId(rootUuid.toString());
+        folder.setIdParent(null);
+        folder.setName(rootFolder.getName());
+        folder.setPathname(rootFolder.getAbsolutePath());
+        List<Folder> folders = FactoryDAO.folderDAO.getRootFolders();
         for (File file : rootFolder.listFiles()) {
-            folder = null;
             if (file.isDirectory()) {
-                folder = new Folder();
-                folder.setId(rootUuid.toString());
-                folder.setIdParent(null);
-                folder.setName(file.getName());
-                folder.setPathname(file.getAbsolutePath());
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
                         try {
-                            scan(file, rootUuid, UUID.randomUUID());
+                            Folder bddFolder = getFolder(folders, file);
+                            UUID newId = null;
+                            if (bddFolder == null){
+                                newId = UUID.randomUUID();
+                            }else{
+                                newId = UUID.fromString(bddFolder.getId());
+                            }
+                            scan(file, rootUuid, newId, lastScan);
                         } catch (SQLException ex) {
-                            Logger.getLogger(ScanInc.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
-                lf.add(folder);
-            } else if (isGoodFile(file, extentionMediaFiles)) {
-                Musique m = TagHelper.getInfo(file);
-                m.setId(UUID.randomUUID().toString());
-                m.setFolderId(folder.getId());
-                lm.add(m);
-            } else if (isGoodFile(file, extentionPictureFiles)) {
-                if (folder != null) {
-                    folder.setImgAlbum(file.getAbsolutePath());
+            } else if (isGoodFile(file, Constantes.EXTENTION_MEDIA_FILE)) {
+                if (!addInBdd(file, lastScan)) {
+                    continue;
                 }
+                Musique m = TagHelper.getInfo(file);
+                m.setFolderId(folder.getId());
+                m.setId(UUID.randomUUID().toString());
+                FactoryDAO.musiqueDAO.insert(m);
             }
-        }
-        if (!lm.isEmpty()) {
-            FactoryDAO.musiqueDAO.insert(lm);
-        }
-        if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
-    private void scan(File parentFolder, UUID rootid, UUID id) throws SQLException {
-        List<Musique> lm = new ArrayList<>();
-        List<Folder> lf = new ArrayList<>();
-        Folder folder = null;
-        for (File file : parentFolder.listFiles()) {
+    private void scan(File parentFolderFile, UUID rootid, UUID id, final BigInteger lastScan) throws SQLException {
+        Folder folder = new Folder();
+        folder.setId(id.toString());
+        folder.setIdParent(rootid.toString());
+        folder.setName(parentFolderFile.getName());
+        folder.setPathname(parentFolderFile.getAbsolutePath());
+        List<Folder> folders = FactoryDAO.folderDAO.getParentFolders(id.toString());
+        if (addInBdd(parentFolderFile, lastScan)) {
+            folder = FactoryDAO.folderDAO.insert(folder);
+        }
+        for (File file : parentFolderFile.listFiles()) {
+            if (file.isFile() && !addInBdd(file, lastScan)) {
+                continue;
+            }
             if (file.isDirectory()) {
-                folder = new Folder();
-                folder.setId(id.toString());
-                folder.setIdParent(rootid.toString());
-                folder.setName(file.getName());
-                folder.setPathname(file.getAbsolutePath());
                 getExecutor().submit(new Thread() {
                     @Override
                     public void run() {
                         try {
-                            scan(file, id, UUID.randomUUID());
+                            Folder bddFolder = getFolder(folders, file);
+                            UUID newId = null;
+                            if (bddFolder == null){
+                                newId = UUID.randomUUID();
+                            }else{
+                                newId = UUID.fromString(bddFolder.getId());
+                            }
+                            scan(file, id, newId, lastScan);
                         } catch (SQLException ex) {
-                            Logger.getLogger(ScanInc.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(ScanInitial.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
-                lf.add(folder);
-            } else if (isGoodFile(file, extentionMediaFiles)) {
+            } else if (isGoodFile(file, Constantes.EXTENTION_MEDIA_FILE)) {
                 Musique m = TagHelper.getInfo(file);
-                m.setId(UUID.randomUUID().toString());
                 m.setFolderId(folder.getId());
-                lm.add(m);
-            } else if (isGoodFile(file, extentionPictureFiles)) {
-                if (folder != null) {
-                    folder.setImgAlbum(file.getAbsolutePath());
-                }
+                m.setId(UUID.randomUUID().toString());
+                FactoryDAO.musiqueDAO.insert(m);
+            } else if (isGoodFile(file, Constantes.EXTENTION_PICTURE_FILE)) {
+                folder.setImgAlbum(file.getAbsolutePath());
+                FactoryDAO.folderDAO.update(folder);
             }
-        }
-        if (!lm.isEmpty()) {
-            FactoryDAO.musiqueDAO.insert(lm);
-        }
-        if (!lf.isEmpty()) {
-            FactoryDAO.folderDAO.insert(lf);
         }
     }
 
@@ -125,6 +128,26 @@ public class ScanInc {
         return false;
     }
 
+    private boolean addInBdd(File file, final BigInteger lastScan) {
+        Path p = Paths.get(file.getAbsolutePath());
+        try {
+            BasicFileAttributes view = Files.getFileAttributeView(p, BasicFileAttributeView.class).readAttributes();
+            return view.creationTime().toMillis() >= lastScan.longValue();
+        } catch (IOException ex) {
+            Logger.getLogger(ScanInc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private Folder getFolder(List<Folder> folders, File folder) {
+        for (Folder f : folders) {
+            if (f.getName().equals(folder.getName())) {
+                return f;
+            }
+        }
+        return null;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -132,13 +155,14 @@ public class ScanInc {
         if (args.length == 0) {
             System.out.println("folder obligatoire ! Merci");
             return;
-        }        
-        new ScanInc().readFolder(new File(args[0]));
+        }
+        new ScanInc().launchScan(new File(args[0]));
 
     }
 
     public void launchScan(File initialFolder) throws SQLException {
-        readFolder(initialFolder);
+        BigInteger lastScan = FactoryDAO.lsatScanDAO.getLastScan();        
+        readFolder(initialFolder, lastScan);
         FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }
 

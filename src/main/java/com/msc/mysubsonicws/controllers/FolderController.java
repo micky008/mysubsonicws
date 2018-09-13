@@ -3,6 +3,7 @@ package com.msc.mysubsonicws.controllers;
 import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Folder;
 import com.msc.mysubsonicws.helpers.WSConfig;
+import com.msc.mysubsonicws.scan.ScanInc;
 import com.msc.mysubsonicws.scan.ScanInitial;
 import java.sql.SQLException;
 import java.util.List;
@@ -31,13 +32,13 @@ public class FolderController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getNextFolders(@PathParam("id") String id) {
-        return FactoryDAO.folderDAO.getNextFolders(id);
+        return FactoryDAO.folderDAO.getParentFolders(id);
     }
 
     @Path("parent/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Folder> getParentFolders(String id) {
+    public List<Folder> getParentFolders(@PathParam("id") String id) {
         return FactoryDAO.folderDAO.getParentFolders(id);
     }
 
@@ -66,8 +67,16 @@ public class FolderController {
     @Path("scan/inc")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Folder> scanInc() {
-        return FactoryDAO.folderDAO.getRootFolders();        
+    public boolean scanInc() {
+        try {
+            ScanInc si = new ScanInc();
+            WSConfig conf = WSConfig.getInstance();
+            si.launchScan(conf.getFolderToScan());
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(FolderController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;      
     }
 
 }

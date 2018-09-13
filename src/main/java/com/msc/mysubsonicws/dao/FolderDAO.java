@@ -10,23 +10,23 @@ import org.hibernate.Session;
  *
  * @author Michael
  */
-public class FolderDAO extends AbstractDAO<Folder>{
+public class FolderDAO extends AbstractDAO<Folder> {
 
     public FolderDAO() {
     }
 
-    public List<Folder> getNextFolders(String id) {
-        return this.getObjects("from Folder where id='" + id + "'");        
-    }
 
-    public List<Folder> getParentFolders(String id) {        
+    public List<Folder> getParentFolders(String id) {
         return this.getObjects("from Folder where idParent='" + id + "'");
     }
 
     public List<Folder> getRootFolders() {
-        return this.getObjects("from Folder where id='" + Folder.ROOT_ID + "'");
+        return this.getObjects("from Folder where idParent='" + Folder.ROOT_ID + "'");
     }
 
+    public Folder getFolderById(String id) {
+        return this.getObject("from Folder where id='" + id + "'");
+    }
 
     public void insertTest() {
         Folder f = new Folder();
