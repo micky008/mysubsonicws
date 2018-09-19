@@ -20,7 +20,8 @@
         <property name="connection.password"></property>
 
         <property name="c3p0.max_size">10</property>
-        <property name="c3p0.min_size">1</property>
+        <property name="c3p0.min_size">1</property>        
+        <property name="c3p0.idle_test_period">1000</property>
         
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>

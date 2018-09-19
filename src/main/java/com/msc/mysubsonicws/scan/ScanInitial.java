@@ -8,7 +8,6 @@ import com.msc.mysubsonicws.helpers.Constantes;
 import java.io.File;
 import java.math.BigInteger;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -56,7 +56,7 @@ public class TagHelper {
             musique.setType(type);
         }
         if (musique.getTitre() == null || musique.getTitre().isEmpty()) {
-            String tst = audioFile.getName().substring(0, audioFile.getName().length() - (musique.getType().length()+1) );
+            String tst = audioFile.getName().substring(0, audioFile.getName().length() - (musique.getType().length() + 1));
             musique.setTitre(tst);
         }
 

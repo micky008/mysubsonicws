@@ -14,8 +14,8 @@ public class MySessionFactory {
 
     private static SessionFactory sessionFactory;
 
-    public static void setUp()  {
-        
+    public static void setUp() {
+
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(new File("hibernate-dev.cfg.xml")).build();
         try {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
@@ -24,9 +24,9 @@ public class MySessionFactory {
             StandardServiceRegistryBuilder.destroy(registry);
         }
     }
-    
-    public synchronized static SessionFactory getInstance(){
-        if (sessionFactory == null){
+
+    public synchronized static SessionFactory getInstance() {
+        if (sessionFactory == null) {
             setUp();
         }
         return sessionFactory;

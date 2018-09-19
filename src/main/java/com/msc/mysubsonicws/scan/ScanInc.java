@@ -51,9 +51,9 @@ public class ScanInc {
                         try {
                             Folder bddFolder = getFolder(folders, file);
                             UUID newId = null;
-                            if (bddFolder == null){
+                            if (bddFolder == null) {
                                 newId = UUID.randomUUID();
-                            }else{
+                            } else {
                                 newId = UUID.fromString(bddFolder.getId());
                             }
                             scan(file, rootUuid, newId, lastScan);
@@ -95,9 +95,9 @@ public class ScanInc {
                         try {
                             Folder bddFolder = getFolder(folders, file);
                             UUID newId = null;
-                            if (bddFolder == null){
+                            if (bddFolder == null) {
                                 newId = UUID.randomUUID();
-                            }else{
+                            } else {
                                 newId = UUID.fromString(bddFolder.getId());
                             }
                             scan(file, id, newId, lastScan);
@@ -161,7 +161,7 @@ public class ScanInc {
     }
 
     public void launchScan(File initialFolder) throws SQLException {
-        BigInteger lastScan = FactoryDAO.lsatScanDAO.getLastScan();        
+        BigInteger lastScan = FactoryDAO.lsatScanDAO.getLastScan();
         readFolder(initialFolder, lastScan);
         FactoryDAO.lsatScanDAO.update(new BigInteger("" + System.currentTimeMillis()));
     }

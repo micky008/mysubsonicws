@@ -76,7 +76,7 @@ public class FolderController {
         } catch (SQLException ex) {
             Logger.getLogger(FolderController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;      
+        return false;
     }
 
 }

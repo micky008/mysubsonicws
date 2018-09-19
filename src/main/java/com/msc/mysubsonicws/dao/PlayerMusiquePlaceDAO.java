@@ -9,9 +9,9 @@ import java.util.List;
  * @author Michael
  */
 public class PlayerMusiquePlaceDAO extends AbstractDAO<PlayerMusiquePlace> {
-    
-    public List<PlayerMusiquePlace> getPmpByPlayer(Integer idPlayer){
-        return this.getObjects("select pmp from PlayerMusiquePlace pmp, Player p where p.id= "+idPlayer);
+
+    public List<PlayerMusiquePlace> getPmpByPlayer(Integer idPlayer) {
+        return this.getObjects("select pmp from PlayerMusiquePlace pmp, Player p where p.id= " + idPlayer);
     }
-    
+
 }

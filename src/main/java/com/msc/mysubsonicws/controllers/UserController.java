@@ -1,8 +1,6 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.google.gson.Gson;
 import com.msc.mysubsonicws.dao.FactoryDAO;
-import com.msc.mysubsonicws.dao.UserDAO;
 import com.msc.mysubsonicws.entity.User;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -22,11 +20,9 @@ public class UserController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("insert")
-    public Response insert(String userStr) {
-        Gson gson = new Gson();
-        User u = gson.fromJson(userStr, User.class);
-        u.convertPassword();
-        FactoryDAO.userDAO.insert(u);
+    public Response insert(User user) {
+        user.convertPassword();
+        FactoryDAO.userDAO.insert(user);
         return Response.ok("ok").build();
     }
 
@@ -34,11 +30,9 @@ public class UserController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
-    public Response login(String userStr) {
-        Gson gson = new Gson();
-        User u = gson.fromJson(userStr, User.class);
-        u.convertPassword();
-        if (FactoryDAO.userDAO.login(u) != null) {
+    public Response login(User user) {
+        user.convertPassword();
+        if (FactoryDAO.userDAO.login(user) != null) {
             return Response.ok().build();
         }
         return Response.noContent().build();

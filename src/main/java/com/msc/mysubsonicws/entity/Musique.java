@@ -114,7 +114,7 @@ public class Musique implements Serializable {
 
     @Override
     public String toString() {
-        return getId() + " " + getFolderId()+ " " + getTitre() + " " + getArtiste();
+        return getId() + " " + getFolderId() + " " + getTitre() + " " + getArtiste();
     }
 
     /**
@@ -172,7 +172,5 @@ public class Musique implements Serializable {
     public void setAnnee(String annee) {
         this.annee = annee;
     }
-
-    
 
 }

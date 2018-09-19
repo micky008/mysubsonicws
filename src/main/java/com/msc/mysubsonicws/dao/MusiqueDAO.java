@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Michael
  */
-public class MusiqueDAO extends AbstractDAO<Musique> {    
+public class MusiqueDAO extends AbstractDAO<Musique> {
 
     public Musique getMusiqueById(String id) {
         return this.getObject("from Musique where id='" + id + "'");

@@ -67,18 +67,18 @@ public class User implements Serializable {
     }
 
     public static String convertPassword(String password) {
-        try{
+        try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(password.getBytes("UTF-8"));
             return Base64.getEncoder().encodeToString(crypt.digest());
-        }catch(Exception e){
+        } catch (Exception e) {
         }
         return null;
     }
 
-    public String convertPassword(){
+    public String convertPassword() {
         return convertPassword(this.password);
     }
-    
+
 }

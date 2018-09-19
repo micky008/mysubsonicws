@@ -31,35 +31,24 @@ public class MusiqueController {
     final int chunk_size = 1024 * 1024; // 1MB chunks
 
     @GET
-    @Path("resolve/{id}")
+    @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Musique resolve(@PathParam("id") String id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiqueById(id);        
+        return FactoryDAO.musiqueDAO.getMusiqueById(id);
     }
 
     @GET
     @Path("folder/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByFolder(@PathParam("id") String id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);        
-    }
-
-    @GET
-    @Path("id/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Musique getMusiqueById(@PathParam("id") String id) throws Exception {
-        Musique m = resolve(id);
-        m.setFullName(null);
-        m.setType(null);
-        m.setFolderId(null);        
-        return m;
+        return FactoryDAO.musiqueDAO.getMusiquesByFolder(id);
     }
 
     @GET
     @Path("player/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Musique> getMusiqueByPlayer(@PathParam("id") Integer id) throws Exception {
-        return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);        
+        return FactoryDAO.musiqueDAO.getMusiquesByPlayer(id);
     }
 
     @GET

@@ -28,6 +28,7 @@ public class Main {
         URI baseUri = UriBuilder.fromUri("http://" + WSConfig.getInstance().getDomain() + "/").port(WSConfig.getInstance().getPort()).build();
         ResourceConfig config = new ResourceConfig();
         config.packages("com.msc.mysubsonicws.controllers");
+        config.packages("com.msc.mysubsonicws.helpers.writers");
         JdkHttpServerFactory.createHttpServer(baseUri, config);
     }
 

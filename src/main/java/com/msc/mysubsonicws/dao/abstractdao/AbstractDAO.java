@@ -1,8 +1,6 @@
 package com.msc.mysubsonicws.dao.abstractdao;
 
 import com.msc.mysubsonicws.dao.MySessionFactory;
-import com.msc.mysubsonicws.entity.Folder;
-import com.msc.mysubsonicws.entity.LastScan;
 import java.util.List;
 import org.hibernate.Session;
 
@@ -69,7 +67,7 @@ public class AbstractDAO<T> {
         session.beginTransaction();
 
         for (T t : m) {
-            session.update(m);
+            session.update(t);
         }
 
         session.getTransaction().commit();
@@ -83,7 +81,7 @@ public class AbstractDAO<T> {
         session.beginTransaction();
 
         for (T t : m) {
-            session.update(m);
+            session.update(t);
         }
 
         session.getTransaction().commit();
@@ -107,8 +105,9 @@ public class AbstractDAO<T> {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
 
-        session.delete(m);
-
+        for (T t : m) {
+            session.delete(t);
+        }
         session.getTransaction().commit();
         session.close();
         return m;
@@ -118,7 +117,9 @@ public class AbstractDAO<T> {
         Session session = MySessionFactory.getInstance().openSession();
         session.beginTransaction();
 
-        session.delete(m);
+        for (T t : m) {
+            session.delete(t);
+        }
 
         session.getTransaction().commit();
         session.close();

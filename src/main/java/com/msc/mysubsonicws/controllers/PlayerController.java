@@ -1,11 +1,9 @@
 package com.msc.mysubsonicws.controllers;
 
-import com.google.gson.Gson;
 import com.msc.mysubsonicws.dao.FactoryDAO;
 import com.msc.mysubsonicws.entity.Player;
 import com.msc.mysubsonicws.entity.PlayerMusiquePlace;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -44,25 +42,15 @@ public class PlayerController {
     @Path("player/insert")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Player insertPlayers(String playerStr) throws SQLException {
-        if (playerStr == null || playerStr.isEmpty()) {
-            return null;
-        }
-        Gson gson = new Gson();
-        Player[] ps = gson.fromJson(playerStr, Player[].class);
-        return FactoryDAO.playerDAO.insert(ps[0]);
+    public Player insertPlayers(Player player) throws SQLException {
+        return FactoryDAO.playerDAO.insert(player);
     }
 
     @POST
     @Path("player/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Player updatePlayer(String playerStr) throws SQLException {
-        if (playerStr == null || playerStr.isEmpty()) {
-            return null;
-        }
-        Gson gson = new Gson();
-        Player player = gson.fromJson(playerStr, Player.class);
+    public Player updatePlayer(Player player) throws SQLException {
         return FactoryDAO.playerDAO.update(player);
     }
 
@@ -70,13 +58,8 @@ public class PlayerController {
     @Path("player/delete")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Player deletePlayer(String playerStr) throws SQLException {
-        if (playerStr == null || playerStr.isEmpty()) {
-            return null;
-        }
-        Gson gson = new Gson();
-        Player p = gson.fromJson(playerStr, Player.class);
-        return FactoryDAO.playerDAO.delete(p);
+    public Player deletePlayer(Player player) throws SQLException {
+        return FactoryDAO.playerDAO.delete(player);
     }
 
     @GET
@@ -90,26 +73,16 @@ public class PlayerController {
     @Path("pmp/insert")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusiquePlace[] insertPmp(String playerStr) throws SQLException {
-        if (playerStr == null || playerStr.isEmpty()) {
-            return null;
-        }
-        Gson gson = new Gson();
-        PlayerMusiquePlace[] ps = gson.fromJson(playerStr, PlayerMusiquePlace[].class);
-        return FactoryDAO.playerMusicPlayerDAO.insert(ps);
+    public PlayerMusiquePlace[] insertPmp(PlayerMusiquePlace[] pmps) throws SQLException {
+        return FactoryDAO.playerMusicPlayerDAO.insert(pmps);
     }
 
     @POST
     @Path("pmp/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusiquePlace[] updatePmp(String playerStr) throws SQLException {
-        if (playerStr == null || playerStr.isEmpty()) {
-            return null;
-        }
-        Gson gson = new Gson();
-        PlayerMusiquePlace[] players = gson.fromJson(playerStr, PlayerMusiquePlace[].class);
-        return FactoryDAO.playerMusicPlayerDAO.update(players);
+    public PlayerMusiquePlace[] updatePmp(PlayerMusiquePlace[] pmps) throws SQLException {
+        return FactoryDAO.playerMusicPlayerDAO.update(pmps);
     }
 
 }
