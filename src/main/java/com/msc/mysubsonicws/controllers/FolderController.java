@@ -31,8 +31,8 @@ public class FolderController {
     @Path("id/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Folder> getNextFolders(@PathParam("id") String id) {
-        return FactoryDAO.folderDAO.getParentFolders(id);
+    public Folder getNextFolders(@PathParam("id") String id) {
+        return FactoryDAO.folderDAO.getFolderById(id);
     }
 
     @Path("parent/{id}")
