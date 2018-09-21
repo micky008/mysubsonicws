@@ -84,5 +84,12 @@ public class PlayerController {
     public PlayerMusiquePlace[] updatePmp(PlayerMusiquePlace[] pmps) throws SQLException {
         return FactoryDAO.playerMusicPlayerDAO.update(pmps);
     }
+    @POST
+    @Path("pmp/delete")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public PlayerMusiquePlace[] deletePmp(PlayerMusiquePlace[] pmps) throws SQLException {
+        return FactoryDAO.playerMusicPlayerDAO.delete(pmps);
+    }
 
 }

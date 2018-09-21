@@ -20,22 +20,19 @@ public class UserController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("insert")
-    public Response insert(User user) {
+    public Boolean insert(User user) {
         user.convertPassword();
         FactoryDAO.userDAO.insert(user);
-        return Response.ok("ok").build();
+        return true;
     }
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
-    public Response login(User user) {
+    public Boolean login(User user) {
         user.convertPassword();
-        if (FactoryDAO.userDAO.login(user) != null) {
-            return Response.ok().build();
-        }
-        return Response.noContent().build();
+        return (FactoryDAO.userDAO.login(user) != null);
     }
 
 }
