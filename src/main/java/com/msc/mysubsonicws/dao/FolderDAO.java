@@ -2,9 +2,9 @@ package com.msc.mysubsonicws.dao;
 
 import com.msc.mysubsonicws.dao.abstractdao.AbstractDAO;
 import com.msc.mysubsonicws.entity.Folder;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
-import org.hibernate.Session;
 
 /**
  *
@@ -16,39 +16,27 @@ public class FolderDAO extends AbstractDAO<Folder> {
     }
 
     public List<Folder> getParentFolders(String id) {
-        return this.getObjects("from Folder where idParent='" + id + "'");
+        List<Folder> lf = this.getObjects("from Folder where idParent='" + id + "'");
+        Collections.sort(lf, new MySort());
+        return lf;
     }
 
     public List<Folder> getRootFolders() {
-        return this.getObjects("from Folder where idParent='" + Folder.ROOT_ID + "'");
+        List<Folder> lf = this.getObjects("from Folder where idParent='" + Folder.ROOT_ID + "'");
+        Collections.sort(lf, new MySort());
+        return lf;
     }
 
     public Folder getFolderById(String id) {
         return this.getObject("from Folder where id='" + id + "'");
     }
 
-    public void insertTest() {
-        Folder f = new Folder();
-        f.setId(Folder.ROOT_ID);
-        f.setIdParent(null);
-        f.setImgAlbum(null);
-        f.setName("truc");
-        f.setPathname("c:/truc");
-        Folder f2 = new Folder();
-        f2.setId(UUID.randomUUID().toString());
-        f2.setIdParent(Folder.ROOT_ID);
-        f2.setImgAlbum(null);
-        f2.setName("truc2");
-        f2.setPathname("c:/truc2");
+    private class MySort implements Comparator<Folder> {
 
-        Session session = MySessionFactory.getInstance().openSession();
-        session.beginTransaction();
-
-        session.save(f);
-        session.save(f2);
-
-        session.getTransaction().commit();
-        session.close();
-
+        @Override
+        public int compare(Folder o1, Folder o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
     }
+
 }

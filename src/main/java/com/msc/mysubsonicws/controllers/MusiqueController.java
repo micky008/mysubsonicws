@@ -54,7 +54,7 @@ public class MusiqueController {
     @GET
     @Path("stream/{id}")
     public Response streamAudio(@HeaderParam("Range") String range, @PathParam("id") String id) throws Exception {
-        Musique m = this.resolve(id);
+        Musique m = FactoryDAO.musiqueDAO.getMusiqueById(id);
         Response.ResponseBuilder r = buildStream(new File(m.getFullName()), range);
         r.header(HttpHeaders.CONTENT_TYPE, "audio/" + m.getType());
         return r.build();

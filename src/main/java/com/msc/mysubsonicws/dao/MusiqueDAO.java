@@ -2,6 +2,8 @@ package com.msc.mysubsonicws.dao;
 
 import com.msc.mysubsonicws.dao.abstractdao.AbstractDAO;
 import com.msc.mysubsonicws.entity.Musique;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -19,7 +21,14 @@ public class MusiqueDAO extends AbstractDAO<Musique> {
     }
 
     public List<Musique> getMusiquesByFolder(String folderId) {
-        return this.getObjects("from Musique where folderId='" + folderId + "'");
+        List<Musique> lm = this.getObjects("from Musique where folderId='" + folderId + "'");
+        Collections.sort(lm, new Comparator<Musique>() {
+            @Override
+            public int compare(Musique o1, Musique o2) {
+                return o1.getTitre().compareTo(o2.getTitre());
+            }
+        });
+        return lm;
     }
 
 }
