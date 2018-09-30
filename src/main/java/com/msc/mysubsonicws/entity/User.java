@@ -78,7 +78,8 @@ public class User implements Serializable {
     }
 
     public String convertPassword() {
-        return convertPassword(this.password);
+        this.password = convertPassword(this.password);
+        return this.password;
     }
 
 }
