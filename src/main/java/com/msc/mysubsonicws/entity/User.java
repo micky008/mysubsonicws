@@ -71,7 +71,7 @@ public class User implements Serializable {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(password.getBytes("UTF-8"));
-            return Base64.getEncoder().encodeToString(crypt.digest());
+            return byteArrayToHexString(crypt.digest());
         } catch (Exception e) {
         }
         return null;
@@ -80,6 +80,15 @@ public class User implements Serializable {
     public String convertPassword() {
         this.password = convertPassword(this.password);
         return this.password;
+    }
+
+    private static String byteArrayToHexString(byte[] b) {
+        String result = "";
+        for (int i = 0; i < b.length; i++) {
+            result
+                    += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+        }
+        return result;
     }
 
 }
