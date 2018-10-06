@@ -5,6 +5,7 @@ import com.msc.mysubsonicws.entity.Player;
 import com.msc.mysubsonicws.entity.PlayerMusiquePlace;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.media.Media;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,7 +34,7 @@ public class PlayerController {
     @GET
     @Path("players")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> getAllPlayers() throws SQLException {
+    public List<Player> getAllPlayers() {
         return FactoryDAO.playerDAO.getAll();
 
     }
@@ -41,55 +42,78 @@ public class PlayerController {
     @POST
     @Path("player/insert")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Player insertPlayers(Player player) throws SQLException {
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public Player insertPlayers(Player player) {
         return FactoryDAO.playerDAO.insert(player);
     }
 
     @POST
     @Path("player/update")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Player updatePlayer(Player player) throws SQLException {
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public Player updatePlayer(Player player) {
         return FactoryDAO.playerDAO.update(player);
     }
 
     @POST
     @Path("player/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Player deletePlayer(Player player) throws SQLException {
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public Player deletePlayer(Player player) {
         return FactoryDAO.playerDAO.delete(player);
     }
 
     @GET
     @Path("pmp/{idPlayer}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PlayerMusiquePlace> getPmp(@PathParam("idPlayer") Integer id) throws SQLException {
+    public List<PlayerMusiquePlace> getPmp(@PathParam("idPlayer") Integer id) {
         return FactoryDAO.playerMusicPlayerDAO.getPmpByPlayer(id);
     }
 
     @POST
     @Path("pmp/insert")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusiquePlace[] insertPmp(PlayerMusiquePlace[] pmps) throws SQLException {
-        return FactoryDAO.playerMusicPlayerDAO.insert(pmps);
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public PlayerMusiquePlace[] insertPmp(PlayerMusiquePlace[] pmps) {
+        try {
+            return FactoryDAO.playerMusicPlayerDAO.insert(pmps);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @POST
     @Path("pmp/update")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusiquePlace[] updatePmp(PlayerMusiquePlace[] pmps) throws SQLException {
-        return FactoryDAO.playerMusicPlayerDAO.update(pmps);
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public PlayerMusiquePlace[] updatePmp(PlayerMusiquePlace[] pmps) {
+        try {
+            if (pmps.length == 0) {
+                return null;
+            }
+            
+            return FactoryDAO.playerMusicPlayerDAO.update(pmps);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
     @POST
     @Path("pmp/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public PlayerMusiquePlace[] deletePmp(PlayerMusiquePlace[] pmps) throws SQLException {
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public PlayerMusiquePlace[] deletePmp(PlayerMusiquePlace[] pmps) {
         return FactoryDAO.playerMusicPlayerDAO.delete(pmps);
+    }
+
+    @POST
+    @Path("pmp/deletePlayer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
+    public List<PlayerMusiquePlace> deletePmp(Player player) {
+        return FactoryDAO.playerMusicPlayerDAO.deleteByPlayer(player);
     }
 
 }

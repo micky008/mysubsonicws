@@ -158,6 +158,41 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>scanInitial</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <executions>
+                            <execution>
+                                <id>buildScan</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>scanInitial</classifier>
+                                    <archive>
+                                        <manifest>
+                                            <addClasspath>true</addClasspath>
+                                            <classpathPrefix>lib/</classpathPrefix>
+                                            <mainClass>com.msc.mysubsonicws.scan.ScanInitial</mainClass>
+                                            <useUniqueVersions>false</useUniqueVersions>
+                                        </manifest>
+                                        <manifestEntries>
+                                            <Class-Path>.</Class-Path>
+                                        </manifestEntries>
+                                    </archive>
+                                </configuration>
+                            </execution>                                                              
+                        </executions>
+                    </plugin>                    
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     

@@ -13,10 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET'){
     curl_setopt($s, CURLOPT_POSTFIELDS, $params);
 }	
 curl_setopt($s, CURLOPT_URL, $url);
-curl_setopt($s, CURLOPT_RETURNTRANSFER, false);
+curl_setopt($s, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($s, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($s, CURLOPT_HEADER, false);
+$sorti = curl_exec($s);
+$ct = curl_getinfo($s, CURLINFO_CONTENT_TYPE);
 header('Access-Control-Allow-Origin: *');
 header("Access-control-allow-headers: origin, content-type, accept, authorization");
 header("Access-control-allow-methods: GET, POST, OPTIONS"); 
-curl_exec($s);
+header('Content-type: '.$ct);
+print $sorti;
+curl_close($s);
 ?>

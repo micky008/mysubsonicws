@@ -17,8 +17,8 @@ import javax.ws.rs.core.Response;
 public class UserController {
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
     @Path("insert")
     public Boolean insert(User user) {
         user.convertPassword();
@@ -27,8 +27,8 @@ public class UserController {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
     @Path("login")
     public Boolean login(User user) {
         user.convertPassword();

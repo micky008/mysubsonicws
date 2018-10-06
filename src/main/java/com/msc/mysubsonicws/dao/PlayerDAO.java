@@ -14,4 +14,8 @@ public class PlayerDAO extends AbstractDAO<Player> {
         return this.getObjects("from Player");
     }
 
+    public Player getPlayerById(Integer id) {
+        return this.getObject("from Player where id=" + id);
+    }
+
 }

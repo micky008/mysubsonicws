@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -22,6 +23,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author Michael
  */
 @Provider
+@Produces(MediaType.APPLICATION_JSON)
 public class MusiqueBodyWriter implements MessageBodyWriter<Object> {
 
     @Override
