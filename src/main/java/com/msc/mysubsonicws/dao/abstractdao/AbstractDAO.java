@@ -144,4 +144,8 @@ public class AbstractDAO<T> {
         return obj;
     }
 
+    protected Session getSession(){
+        return MySessionFactory.getInstance().openSession();
+    }
+    
 }

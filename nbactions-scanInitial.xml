@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath com.msc.mysubsonicws.main.Main</exec.args>
+                <exec.args>-classpath %classpath com.msc.mysubsonicws.scan.ScanInitial C:\Users\Michael\Music</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -24,7 +24,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath com.msc.mysubsonicws.main.Main</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath com.msc.mysubsonicws.scan.ScanInitial C:\Users\Michael\Music</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -39,19 +39,8 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath com.msc.mysubsonicws.main.Main</exec.args>
+                <exec.args>-classpath %classpath com.msc.mysubsonicws.scan.ScanInitial C:\Users\Michael\Music</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
-        </action>
-        <action>
-            <actionName>CUSTOM-cp pprod</actionName>
-            <displayName>cp pprod</displayName>
-            <goals>
-                <goal>clean</goal>
-                <goal>package</goal>
-            </goals>
-            <activatedProfiles>
-                <activatedProfile>prod</activatedProfile>
-            </activatedProfiles>
         </action>
     </actions>

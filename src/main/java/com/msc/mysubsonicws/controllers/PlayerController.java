@@ -60,7 +60,12 @@ public class PlayerController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
     public Player deletePlayer(Player player) {
-        return FactoryDAO.playerDAO.delete(player);
+        try {
+            return FactoryDAO.playerDAO.delete(player);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GET
@@ -92,7 +97,6 @@ public class PlayerController {
             if (pmps.length == 0) {
                 return null;
             }
-            
             return FactoryDAO.playerMusicPlayerDAO.update(pmps);
         } catch (Throwable e) {
             e.printStackTrace();
@@ -105,7 +109,15 @@ public class PlayerController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
     public PlayerMusiquePlace[] deletePmp(PlayerMusiquePlace[] pmps) {
-        return FactoryDAO.playerMusicPlayerDAO.delete(pmps);
+        try {
+            if (pmps.length == 0) {
+                return null;
+            }
+            return FactoryDAO.playerMusicPlayerDAO.delete(pmps);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @POST
@@ -113,7 +125,12 @@ public class PlayerController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_FORM_URLENCODED})
     public List<PlayerMusiquePlace> deletePmp(Player player) {
-        return FactoryDAO.playerMusicPlayerDAO.deleteByPlayer(player);
+        try {
+            return FactoryDAO.playerMusicPlayerDAO.deleteByPlayer(player);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
