@@ -24,44 +24,55 @@ et dans le répertoire target [fraichement crée] il faudra utiliser le jar "MyS
 
 ## Getting started
 
-###1. Copie des fichiers
-la 1ere chose a faire et de COPIER/COLLER les fichiers suivant => config.properties et hibernate-vanillia.cfg.xml
-et de renommer ces copies respectivement : config-dev.properties et hibernate-dev.cfg.xml
-
+### 1. Copie des fichiers
+la 1ere chose a faire et de COPIER/COLLER les fichiers suivant => config.properties et hibernate-vanillia.cfg.xml  
+et de renommer ces copies respectivement : config-dev.properties et hibernate-dev.cfg.xml  
 de remplir les fichiers comme  cela:
 
-####1.1 : bien remplir les fichiers comme il faut.
-#####config-dev.properties
-ws.port=9998
-ws.domain=localhost
-folder.scan=C:/Users/Michael/Music
+#### 1.1 : bien remplir les fichiers comme il faut.
+##### config-dev.properties
+    ws.port=9998  
+    ws.domain=localhost  
+    folder.scan=C:/Users/Michael/Music
 
-#####hibernate-dev
-il faut bien adapter ces cles a notre convenance:
+##### hibernate-dev
+il faut bien adapter ces cles a notre convenance: 
+
     - <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     - <property name="connection.url">jdbc:mysql://localhost/mysubsonic?useSSL=false</property>
     - <property name="connection.username"></property>
     - <property name="connection.password"></property>
     - <property name="dialect">org.hibernate.dialect.MariaDBDialect</property>
-
-    et faire tres attention a cette ligne :
- - <property name="hbm2ddl.auto">create</property>
-mais j'y reviendrai
+     et faire tres attention a cette ligne [mais j'y reviendrai]:
+    - <property name="hbm2ddl.auto">create</property>
+    
 
 ensuite quand on a rempli ces champs, il suffit de lancer la commande:
-###2. lancement du Scan
-java -jar MySubsonicWS-1.0-SNAPSHOT-scanInitial  folder_ou_se_trouve_la_musique
+### 2. lancement du Scan
+java -jar MySubsonicWS-1.0-SNAPSHOT-scanInitial  folder_ou_se_trouve_la_musique  
 
-de le laisser faire. il quitte tout seul au bout d'un moment.
-ca peut prendre du temps. ne pas s'inquiéter.
+de le laisser faire. il quitte tout seul au bout d'un moment.  
+ca peut prendre du temps. ne pas s'inquiéter.  
 
-####2.1 Commenter la ligne hbm2ddl
-une fois le scan fini, il faut revenir dans le fichier de conf,[une dernière fois,]
-et commenter la ligne :
+#### 2.1 Commenter la ligne hbm2ddl
+une fois le scan fini, il faut revenir dans le fichier de conf,[une dernière fois,]  
+et commenter la ligne :  
  - <property name="hbm2ddl.auto">create</property>
 
 Sinon cela aura pour effet de détruire la BDD pour la reconstruire.
 
-###3. Lancement du web-service
+### 3. Lancement du web-service
 
 java -jar MySubsonicWS-1.0-SNAPSHOT-main.jar
+
+## Reverse Proxy
+
+### preambue :
+pour eviter d'utiliser router.php il faut modifier directement la conf apache.  
+pour ca il faut editer le fichier 000-defaultxxx et ajouter :  
+
+    ProxyPass "/test/"  "http://localhost:9998/"      
+    ProxyPassReverse "/test/" "http://localhost:9998/"
+
+`/test` c'est l'url qu'on met pour le browser  
+`http://localhost:9998` c'est l'url en interne du webservice.
