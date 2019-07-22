@@ -15,7 +15,7 @@ public class FolderDAO extends AbstractDAO<Folder> {
     public FolderDAO() {
     }
 
-    public List<Folder> getParentFolders(String id) {
+    public List<Folder> getChildFolders(String id) {
         List<Folder> lf = this.getObjects("from Folder where idParent='" + id + "'");
         Collections.sort(lf, new MySort());
         return lf;

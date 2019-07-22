@@ -80,7 +80,7 @@ public class ScanInc {
         folder.setIdParent(rootid.toString());
         folder.setName(parentFolderFile.getName());
         folder.setPathname(parentFolderFile.getAbsolutePath());
-        List<Folder> folders = FactoryDAO.folderDAO.getParentFolders(id.toString());
+        List<Folder> folders = FactoryDAO.folderDAO.getChildFolders(id.toString());
         if (addInBdd(parentFolderFile, lastScan)) {
             folder = FactoryDAO.folderDAO.insert(folder);
         }

@@ -1,0 +1,9 @@
+<h2>${folder.name}</h2>
+<select id="sel_${folder.id}" onchange="play('${folder.id}')">
+    <option id="-1">--</option>
+    <#list ziks as zik>
+    <option id="${zik.id}">${zik.titre}</option>
+    </#list>
+</select>
+<audio controls  autoplay id="audio_${folder.id}" onended="myended('${folder.id}')"></audio>
+<br/>

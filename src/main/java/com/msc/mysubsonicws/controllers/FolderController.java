@@ -25,32 +25,32 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author Michael
  */
-@Path("rest/folders")
+@Path("/rest/folders/")
 public class FolderController {
 
-    @Path("id/{id}")
     @GET
+    @Path("id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Folder getNextFolders(@PathParam("id") String id) {
         return FactoryDAO.folderDAO.getFolderById(id);
     }
 
-    @Path("parent/{id}")
     @GET
+    @Path("parent/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Folder> getParentFolders(@PathParam("id") String id) {
-        return FactoryDAO.folderDAO.getParentFolders(id);
+    public List<Folder> getChildFolders(@PathParam("id") String id) {
+        return FactoryDAO.folderDAO.getChildFolders(id);
     }
 
-    @Path("root")
     @GET
+    @Path("root")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Folder> getRootFolders() {
         return FactoryDAO.folderDAO.getRootFolders();
     }
 
-    @Path("scan/initial")
     @GET
+    @Path("scan/initial")
     @Produces(MediaType.APPLICATION_JSON)
     public boolean scanInitial() {
         try {
@@ -64,8 +64,8 @@ public class FolderController {
         return false;
     }
 
-    @Path("scan/inc")
     @GET
+    @Path("scan/inc")
     @Produces(MediaType.APPLICATION_JSON)
     public boolean scanInc() {
         try {

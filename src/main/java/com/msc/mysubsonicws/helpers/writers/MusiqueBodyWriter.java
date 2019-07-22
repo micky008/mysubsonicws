@@ -6,6 +6,7 @@ import com.msc.mysubsonicws.entity.PlayerMusiquePlace;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -16,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 /**
  *
@@ -31,7 +31,7 @@ public class MusiqueBodyWriter implements MessageBodyWriter<Object> {
         Class clazz = type;
         try {
             if (type == ArrayList.class) {
-                clazz = Class.forName(((ParameterizedTypeImpl) type1).getActualTypeArguments()[0].getTypeName());
+                clazz = Class.forName(((ParameterizedType) type1).getActualTypeArguments()[0].getTypeName());
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MusiqueBodyWriter.class.getName()).log(Level.SEVERE, null, ex);
